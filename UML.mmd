@@ -1,0 +1,38 @@
+classDiagram
+    class TipoDato {
+        +string: nombre
+        +string: descripcion
+        +string: url
+
+        +esFWI()
+        +esGEI()
+        +esRutas_Caminera()
+        +esWRF()
+        +set_nombre()
+        +get_nombre()
+        +set_descripcion()
+        +get_descripcion()
+        +set_url()
+        +get_url()
+    }
+    note for TipoDato" Los metodos get() y set() son definidos en la clase 
+        TipoDato y son extendidos a todas 
+        las clases del modelo
+        ."
+
+    class Producto {
+        +image: foto
+        +tipo_dato: TipoDato
+
+        +conocer_TipoDato()
+    }
+
+    class Historial {
+        +producto: Producto
+        +datetime: fechaHora
+
+        +conocer_Producto()
+    }
+
+    Producto --> TipoDato : pertenece a 
+    Historial --> Producto : registra 

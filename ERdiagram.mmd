@@ -1,0 +1,23 @@
+erDiagram
+    PRODUCTO ||--o{ FECHA_PRODUCTO : tiene
+    TIPO_PRODUCTO ||--o{ PRODUCTO : clasifica
+
+    PRODUCTO {
+        int idProducto PK
+        image foto
+        int idTipoDato FK
+    }
+
+    FECHA_PRODUCTO {
+        int idHistorial PK
+        date fecha
+        time hora
+        int idProducto FK
+    }
+
+    TIPO_PRODUCTO {
+        int idTipoDato PK
+        string nombre
+        string descripcion
+        string url
+    }
