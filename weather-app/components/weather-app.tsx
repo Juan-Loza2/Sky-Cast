@@ -1,7 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Sun, Menu, Home, Radar, Camera, UmbrellaIcon as UVIcon, Flame, Wind, CloudRain } from 'lucide-react'
-
+import { Sun, Menu, Home, Radar as RadarIcon, Camera, UmbrellaIcon as UVIcon, Flame, Wind, CloudRain, Radar } from 'lucide-react'
+import Link from "next/link"
+import MainContainer from "@/components/MainContainer"
 export default function WeatherApp() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -130,10 +131,12 @@ export default function WeatherApp() {
               <span className="text-xs">Home</span>
             </Button>
             <Button variant="ghost" className="flex flex-col items-center gap-1 text-white">
-              <Button variant="ghost" className="flex flex-col items-center gap-1 text-white">
+              <Link href="/Radar">
+            <Button variant="ghost" className="flex flex-col items-center gap-1 text-white">
               <Radar className="h-5 w-5" />
               <span className="text-xs">Radar</span>
             </Button>
+            </Link>
             </Button>
             <Button variant="ghost" className="flex flex-col items-center gap-1 text-white">
               <Camera className="h-5 w-5" />
