@@ -1,0 +1,93 @@
+
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ohmc_weather
+      POSTGRES_USER: ohmc_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ohmc_network
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+  backend:
+    image: ohmc/weather-backend:latest
+    environment:
+      - DATABASE_URL=postgresql://ohmc_user:$(cat /run/secrets/postgres_password)@db:5432/ohmc_weather
+      - DJANGO_SECRET_KEY_FILE=/run/secrets/django_secret
+      - DJANGO_DEBUG=False
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,your-domain.com
+      - OHMC_PUBLIC_URL=http://yaku.ohmc.ar/public/
+    secrets:
+      - postgres_password
+      - django_secret
+    volumes:
+      - media_files:/app/media
+    networks:
+      - ohmc_network
+    depends_on:
+      - db
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-prod.conf:/etc/nginx/nginx.conf:ro
+      - media_files:/var/www/media:ro
+      - ssl_certs:/etc/nginx/ssl:ro
+    networks:
+      - ohmc_network
+    depends_on:
+      - backend
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  postgres_data:
+    driver: local
+  media_files:
+    driver: local
+  ssl_certs:
+    driver: local
+
+networks:
+  ohmc_network:
+    driver: overlay
+    attachable: true
+
+secrets:
+  postgres_password:
+    external: true
+  django_secret:
+    external: true
