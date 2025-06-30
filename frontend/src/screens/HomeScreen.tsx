@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -23,6 +22,8 @@ import ProductCard from '../components/ProductCard';
 import ProductTypeCard from '../components/ProductTypeCard';
 import LoadingShimmer from '../components/LoadingShimmer';
 import EmptyState from '../components/EmptyState';
+import MainTabsBar from '../components/MainTabsBar';
+import WRFSelector from '../components/WRFSelector';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -39,6 +40,7 @@ const HomeScreen: React.FC = () => {
   const [latestProducts, setLatestProducts] = useState<WeatherProduct[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingLatest, setLoadingLatest] = useState(true);
+  const [activeTab, setActiveTab] = useState('wrf');
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -92,16 +94,38 @@ const HomeScreen: React.FC = () => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
         showsVerticalScrollIndicator={false}>
-        
-        {/* Header de bienvenida */}
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>
-            Observatorio Hidrometeorológico
-          </Text>
-          <Text style={styles.welcomeSubtitle}>
-            Productos meteorológicos en tiempo real
-          </Text>
-        </View>
+        {/* Barra de tabs principal */}
+        <MainTabsBar activeTab={activeTab} onTabChange={setActiveTab} />
+
+        {/* Renderizar sección según tab activo */}
+        {activeTab === 'wrf' && (
+          <View style={{marginBottom: 32}}>
+            <Text style={styles.sectionTitle}>Pronóstico WRF</Text>
+            {/* Aquí irá el selector de variable, fecha, hora y la imagen */}
+            <Text style={{color: '#64748b', marginTop: 8}}>Selecciona variable, fecha y hora para ver el producto WRF.</Text>
+          </View>
+        )}
+        {activeTab === 'fwi' && (
+          <View style={{marginBottom: 32}}>
+            <Text style={styles.sectionTitle}>Índice de Incendios (FWI)</Text>
+            <Text style={{color: '#64748b', marginTop: 8}}>Aquí se mostrará el mapa de incendios del día.</Text>
+          </View>
+        )}
+        {activeTab === 'gases' && (
+          <View style={{marginBottom: 32}}>
+            <Text style={styles.sectionTitle}>Gases Atmosféricos</Text>
+            <Text style={{color: '#64748b', marginTop: 8}}>Selecciona CO₂ o CH₄ para ver la medición.</Text>
+          </View>
+        )}
+        {activeTab === 'vientos' && (
+          <View style={{marginBottom: 32}}>
+            <Text style={styles.sectionTitle}>Ráfagas de Viento</Text>
+            <Text style={{color: '#64748b', marginTop: 8}}>Aquí se mostrará la animación o imagen de vientos.</Text>
+          </View>
+        )}
+        {activeTab === 'WRF' && (
+          <WRFSelector />
+        )}
 
         {/* Sección de tipos de productos */}
         <View style={styles.section}>
