@@ -1,14 +1,13 @@
-
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import HomeScreen from '../screens/HomeScreen';
-import ProductsScreen from '../screens/ProductsScreen';
-import ProductDetailScreen from '../screens/ProductDetailScreen';
-import FiltersScreen from '../screens/FiltersScreen';
-import AboutScreen from '../screens/AboutScreen';
+// import ProductsScreen from '../screens/ProductsScreen';
+// import ProductDetailScreen from '../screens/ProductDetailScreen';
+// import FiltersScreen from '../screens/FiltersScreen';
+// import AboutScreen from '../screens/AboutScreen';
 
 import {COLORS, SIZES} from '../constants/theme';
 
@@ -59,6 +58,7 @@ const getTabBarIcon = (routeName: string, focused: boolean, size: number) => {
 const MainTabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, size}) =>
           getTabBarIcon(route.name, focused, size),
@@ -97,6 +97,7 @@ const MainTabNavigator: React.FC = () => {
           headerTitle: 'OHMC Weather',
         }}
       />
+      {/*
       <Tab.Screen
         name="Products"
         component={ProductsScreen}
@@ -113,6 +114,7 @@ const MainTabNavigator: React.FC = () => {
           headerTitle: 'Información',
         }}
       />
+      */}
     </Tab.Navigator>
   );
 };
@@ -142,6 +144,7 @@ const AppNavigator: React.FC = () => {
         component={MainTabNavigator}
         options={{headerShown: false}}
       />
+      {/*
       <Stack.Screen
         name="ProductDetail"
         component={ProductDetailScreen}
@@ -159,6 +162,7 @@ const AppNavigator: React.FC = () => {
           presentation: 'modal',
         }}
       />
+      */}
     </Stack.Navigator>
   );
 };
