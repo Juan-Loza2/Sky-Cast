@@ -1,160 +1,348 @@
+# 🌤️ OHMC Weather API - Sistema Meteorológico Completo
 
-# OHMC Weather Viewer
+Sistema integral de gestión de productos meteorológicos con Django REST Framework, PostgreSQL, Redis, Celery y frontend React.
 
-Aplicación móvil para visualizar productos meteorológicos del Observatorio Hidrometeorológico de Córdoba (OHMC).
+## 📋 Tabla de Contenidos
+
+- [Características](#-características)
+- [Arquitectura](#-arquitectura)
+- [Requisitos Previos](#-requisitos-previos)
+- [Instalación Paso a Paso](#-instalación-paso-a-paso)
+- [Uso del Sistema](#-uso-del-sistema)
+- [API Endpoints](#-api-endpoints)
+- [Comandos Útiles](#-comandos-útiles)
+- [Troubleshooting](#-troubleshooting)
+- [Producción](#-producción)
+
+## 🚀 Características
+
+- **🔄 Sincronización automática** de datos meteorológicos del OHMC
+- **📊 API REST completa** con filtros avanzados
+- **🎨 Admin personalizado** con dashboard y estadísticas
+- **⚛️ Frontend React moderno** con interfaz intuitiva
+- **🐳 Containerización completa** con Docker
+- **📅 Tareas programadas** con Celery y Redis
+- **🗄️ Base de datos PostgreSQL** robusta
+- **🌐 Interfaz responsive** para todos los dispositivos
 
 ## 🏗️ Arquitectura
 
-- **Frontend**: React Native
-- **Backend**: Django REST Framework
-- **Base de datos**: PostgreSQL
-- **Containerización**: Docker + Docker Swarm
-- **Infraestructura**: Clúster Proxmox
+\`\`\`
+JSON (OHMC) → API Django → PostgreSQL → API REST → Frontend React
+                ↓
+            Celery + Redis (Tareas programadas)
+\`\`\`
 
-## 🚀 Inicio rápido
+## 📋 Requisitos Previos
 
-### Desarrollo local
+- **Docker** y **Docker Compose** instalados
+- **Git** para clonar el repositorio
+- **Node.js 18+** y **npm** (para el frontend)
+- Al menos **4GB de RAM** disponible
+- **Puertos libres**: 8000 (Django), 3000 (React), 5432 (PostgreSQL), 6379 (Redis)
 
-```bash
-# Clonar el repositorio
-git clone <repository-url>
-cd ohmc-weather-viewer
+## 🛠️ Instalación Paso a Paso
 
-# Levantar servicios con Docker Compose
-docker-compose up -d
+### 1️⃣ Clonar el Repositorio
 
-# La API estará disponible en http://localhost:8000
-# El frontend se debe ejecutar por separado (ver sección Frontend)
-```
+\`\`\`bash
+git clone <tu-repositorio-url>
+cd SkyCast-f7
+\`\`\`
 
-### Producción con Docker Swarm
+### 2️⃣ Configurar Variables de Entorno
 
-```bash
-# Inicializar Docker Swarm (si no está inicializado)
-docker swarm init
+\`\`\`bash
+# Copiar archivo de configuración
+cp .env.example .env
 
-# Desplegar el stack
-docker stack deploy -c swarm-stack.yml ohmc-weather
+# Editar variables si es necesario (opcional)
+nano .env
+\`\`\`
 
-# Verificar servicios
-docker service ls
-```
+### 3️⃣ Levantar el Backend (Método Corregido)
 
-## 📁 Estructura del proyecto
+\`\`\`bash
+# Opción A: Script automático mejorado
+chmod +x scripts/setup_dev_fixed.sh
+./scripts/setup_dev_fixed.sh
 
-```
-├── backend/                 # Django REST API
-│   ├── ohmc_api/           # Aplicación principal
-│   ├── products/           # App de productos meteorológicos
-│   ├── requirements.txt    # Dependencias Python
-│   └── Dockerfile         # Imagen Docker del backend
-├── frontend/               # React Native app
-│   ├── src/               # Código fuente
-│   ├── android/           # Configuración Android
-│   ├── ios/               # Configuración iOS
-│   └── package.json       # Dependencias Node.js
-├── docker-compose.yml      # Desarrollo local
-├── swarm-stack.yml        # Producción Docker Swarm
-└── README.md              # Este archivo
-```
+# Opción B: Paso a paso manual (si el script falla)
+# 1. Crear archivo .env
+cp .env.example .env  # o crear manualmente si no existe
 
-## 🔧 Configuración
+# 2. Levantar servicios
+docker-compose down  # limpiar contenedores anteriores
+docker-compose up -d --build
 
-### Variables de entorno
+# 3. Esperar y crear migraciones
+sleep 15
+docker-compose exec web python manage.py makemigrations productos
+docker-compose exec web python manage.py migrate
 
-Crear archivo `.env` en la raíz:
+# 4. Crear superusuario
+docker-compose exec web python manage.py createsuperuser
+\`\`\`
 
-```env
-# Database
-POSTGRES_DB=ohmc_weather
-POSTGRES_USER=ohmc_user
-POSTGRES_PASSWORD=secure_password_here
+### 4️⃣ Arreglar Migraciones (si hay errores)
 
-# Django
-DJANGO_SECRET_KEY=your-secret-key-here
-DJANGO_DEBUG=False
-DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,your-domain.com
+\`\`\`bash
+# Si hay problemas con las migraciones, ejecutar:
+chmod +x scripts/fix_migrations.sh
+./scripts/fix_migrations.sh
+\`\`\`
 
-# OHMC Data Source
-OHMC_PUBLIC_URL=http://yaku.ohmc.ar/public/
-```
+### 5️⃣ Configurar el Frontend React
 
-## 📱 Frontend (React Native)
-
-```bash
+\`\`\`bash
+# Navegar a la carpeta frontend
 cd frontend
-npm install
-
-# Para Android
-npm run android
-
-# Para iOS
-npm run ios
-```
-
-## 🛠️ Backend (Django)
-
-```bash
-cd backend
-
-# Crear entorno virtual
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate   # Windows
 
 # Instalar dependencias
-pip install -r requirements.txt
+npm install
 
-# Migrar base de datos
-python manage.py migrate
+# Iniciar el servidor de desarrollo
+npm start
+\`\`\`
 
-# Crear superusuario
-python manage.py createsuperuser
+### 6️⃣ Verificar que Todo Funciona
 
-# Ejecutar servidor
-python manage.py runserver
-```
+**Backend Django:**
+- 🌐 API: http://localhost:8000/api/
+- 🔧 Admin: http://localhost:8000/admin
+- 👤 Usuario: `admin` / Contraseña: `admin123`
 
-## 📊 Endpoints API
+**Frontend React:**
+- ⚛️ Aplicación: http://localhost:3000
 
-- `GET /api/productos/` - Lista todos los productos
-- `GET /api/productos?tipo=FWI` - Filtrar por tipo
-- `GET /api/productos?fecha=2024-01-01` - Filtrar por fecha
-- `GET /api/ultimos/` - Últimos productos disponibles
-- `GET /api/tipos/` - Lista de tipos de productos
+## 🎯 Uso del Sistema
 
-## 🔄 Carga automática de datos
+### 🔧 Panel de Administración
 
-El sistema incluye un comando de Django para sincronizar datos:
+1. Ve a http://localhost:8000/admin
+2. Inicia sesión con `admin` / `admin123`
+3. Explora las secciones:
+   - **📊 Dashboard**: Estadísticas generales
+   - **🌡️ Tipos de Producto**: WRF, FWI, Gases, Rutas
+   - **📄 Productos**: Archivos individuales con imágenes
+   - **📅 Fechas de Productos**: Historial temporal
 
-```bash
-# Ejecutar manualmente
-python manage.py sync_ohmc_data
+### ⚛️ Frontend React
 
-# Configurar como cronjob (cada hora)
-0 * * * * cd /path/to/project && python manage.py sync_ohmc_data
-```
+1. Ve a http://localhost:3000
+2. Navega entre las pestañas:
+   - **🌡️ WRF**: Selecciona fecha, hora y variable meteorológica
+   - **🔥 FWI**: Índice de peligro de incendio
+   - **🌬️ Gases**: Mediciones de CO₂ y CH₄ (selecciona fecha)
+   - **🛣️ Vientos**: Ráfagas en rutas provinciales
 
-## 🐳 Docker
+## 📊 API Endpoints
 
-### Desarrollo
-```bash
-docker-compose up -d
-```
+### Endpoints Principales
 
-### Producción
-```bash
-docker stack deploy -c swarm-stack.yml ohmc-weather
-```
+| Método | Endpoint | Descripción | Ejemplo |
+|--------|----------|-------------|---------|
+| `GET` | `/api/productos/` | Lista todos los productos | `?tipo=wrf_cba&fecha=2025-06-30` |
+| `GET` | `/api/productos/{id}/` | Detalle de un producto | `/api/productos/1/` |
+| `GET` | `/api/tipos/` | Lista tipos de productos | - |
+| `GET` | `/api/ultimos/` | Últimos productos por tipo | - |
+| `GET` | `/api/estadisticas/` | Estadísticas generales | - |
+| `GET` | `/api/productos/fecha-hora/` | WRF por fecha/hora específica | `?fecha=2025-06-30&hora=12:00` |
+
+### Filtros Disponibles
+
+\`\`\`bash
+# Por tipo de producto
+curl "http://localhost:8000/api/productos/?tipo=wrf_cba"
+
+# Por fecha
+curl "http://localhost:8000/api/productos/?fecha=2025-06-30"
+
+# Por variable (WRF)
+curl "http://localhost:8000/api/productos/?variable=t2"
+
+# Combinados
+curl "http://localhost:8000/api/productos/?tipo=wrf_cba&fecha=2025-06-30&variable=t2"
+\`\`\`
+
+## 🔧 Comandos Útiles
+
+### Docker y Servicios
+
+\`\`\`bash
+# Ver estado de contenedores
+docker-compose ps
+
+# Ver logs en tiempo real
+docker-compose logs -f web
+docker-compose logs -f celery
+
+# Reiniciar servicios
+docker-compose restart
+
+# Parar todos los servicios
+docker-compose down
+
+# Parar y eliminar volúmenes (⚠️ CUIDADO: Borra la BD)
+docker-compose down -v
+\`\`\`
+
+### Django Management
+
+\`\`\`bash
+# Acceder al shell de Django
+docker-compose exec web python manage.py shell
+
+# Crear superusuario adicional
+docker-compose exec web python manage.py createsuperuser
+
+# Ejecutar migraciones manualmente
+docker-compose exec web python manage.py migrate
+
+# Sincronizar datos meteorológicos
+docker-compose exec web python manage.py sync_weather_data
+
+# Sincronizar tipo específico
+docker-compose exec web python manage.py sync_weather_data --type wrf
+\`\`\`
+
+### Base de Datos
+
+\`\`\`bash
+# Acceder a PostgreSQL
+docker-compose exec db psql -U postgres -d weather_db
+
+# Backup de la base de datos
+docker-compose exec db pg_dump -U postgres weather_db > backup.sql
+
+# Restaurar backup
+docker-compose exec -T db psql -U postgres weather_db < backup.sql
+\`\`\`
+
+## 🐛 Troubleshooting
+
+### Problemas Comunes
+
+#### ❌ Error: "relation does not exist"
+\`\`\`bash
+# Solución: Crear y aplicar migraciones
+docker-compose exec web python manage.py makemigrations productos
+docker-compose exec web python manage.py migrate
+\`\`\`
+
+#### ❌ Error: "Port already in use"
+\`\`\`bash
+# Verificar qué proceso usa el puerto
+sudo lsof -i :8000
+
+# Cambiar puerto en docker-compose.yml
+ports:
+  - "8001:8000"  # Cambiar 8000 por 8001
+\`\`\`
+
+#### ❌ Frontend no se conecta al backend
+\`\`\`bash
+# Verificar que el backend esté corriendo
+curl http://localhost:8000/api/productos/
+
+# Verificar proxy en frontend/package.json
+"proxy": "http://localhost:8000"
+\`\`\`
+
+#### ❌ Celery no funciona
+\`\`\`bash
+# Verificar Redis
+docker-compose exec redis redis-cli ping
+
+# Reiniciar Celery
+docker-compose restart celery celery-beat
+\`\`\`
+
+### Logs de Depuración
+
+\`\`\`bash
+# Ver todos los logs
+docker-compose logs
+
+# Logs específicos con timestamps
+docker-compose logs -f -t web
+
+# Últimas 100 líneas
+docker-compose logs --tail=100 web
+\`\`\`
+
+### 🚨 Si Sigues Teniendo Problemas con Migraciones
+
+\`\`\`bash
+# Script de reparación completa
+chmod +x scripts/fix_migrations_complete.sh
+./scripts/fix_migrations_complete.sh
+\`\`\`
+
+## 🚀 Producción
+
+### Despliegue con Docker Swarm
+
+\`\`\`bash
+# Inicializar Docker Swarm
+docker swarm init
+
+# Configurar variables de entorno
+export DB_PASSWORD=tu-password-seguro
+export SECRET_KEY=tu-secret-key-seguro
+
+# Construir y desplegar
+chmod +x scripts/build_and_deploy.sh
+./scripts/build_and_deploy.sh
+\`\`\`
+
+### Variables de Entorno para Producción
+
+\`\`\`bash
+# .env para producción
+DEBUG=False
+SECRET_KEY=tu-secret-key-muy-seguro
+DB_PASSWORD=password-muy-seguro
+ALLOWED_HOSTS=tu-dominio.com,www.tu-dominio.com
+\`\`\`
+
+## 📈 Monitoreo
+
+### Servicios Activos
+
+\`\`\`bash
+# Estado de servicios Docker Swarm
+docker service ls
+
+# Logs de producción
+docker service logs weather-stack_web
+\`\`\`
+
+### Métricas
+
+- **📊 Admin Django**: Estadísticas en tiempo real
+- **🔍 API Status**: `/api/estadisticas/`
+- **💾 Base de Datos**: Consultas de rendimiento
+- **⚡ Redis**: Monitoreo de tareas
 
 ## 🤝 Contribuir
 
 1. Fork el proyecto
-2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
 3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
 4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abrir un Pull Request
+5. Abre un Pull Request
 
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+
+## 📞 Soporte
+
+- **🐛 Issues**: [GitHub Issues](link-to-issues)
+- **📧 Email**: tu-email@ejemplo.com
+- **📖 Documentación**: [Wiki del proyecto](link-to-wiki)
+
+---
+
+**🌟 ¡Gracias por usar OHMC Weather API!**

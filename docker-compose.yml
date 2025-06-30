@@ -1,69 +1,87 @@
-
-version: '3.8'
-
 services:
   db:
-    image: postgres:15-alpine
-    container_name: ohmc_postgres
+    image: postgres:15
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-ohmc_weather}
-      POSTGRES_USER: ${POSTGRES_USER:-ohmc_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ohmc_password_2024}
+      POSTGRES_DB: weather_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     ports:
       - "5432:5432"
-    networks:
-      - ohmc_network
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  backend:
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: ohmc_backend
-    environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-ohmc_user}:${POSTGRES_PASSWORD:-ohmc_password_2024}@db:5432/${POSTGRES_DB:-ohmc_weather}
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-django-insecure-development-key-change-in-production}
-      - DJANGO_DEBUG=${DJANGO_DEBUG:-True}
-      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,0.0.0.0}
-      - OHMC_PUBLIC_URL=${OHMC_PUBLIC_URL:-http://yaku.ohmc.ar/public/}
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
     volumes:
-      - ./backend:/app
-      - media_files:/app/media
+      - redis_data:/data
+
+  web:
+    build: .
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
     ports:
       - "8000:8000"
+    environment:
+      - DEBUG=True
+      - DB_HOST=db
+      - DB_NAME=weather_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  celery:
+    build: .
+    command: celery -A weather_api worker --loglevel=info
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=True
+      - DB_HOST=db
+      - DB_NAME=weather_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
       - db
-    networks:
-      - ohmc_network
-    restart: unless-stopped
-    command: >
-      sh -c "python manage.py collectstatic --noinput &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+      - redis
 
-  nginx:
-    image: nginx:alpine
-    container_name: ohmc_nginx
+  celery-beat:
+    build: .
+    command: celery -A weather_api beat --loglevel=info
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - media_files:/var/www/media:ro
-    ports:
-      - "80:80"
+      - .:/app
+    environment:
+      - DEBUG=True
+      - DB_HOST=db
+      - DB_NAME=weather_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
-      - backend
-    networks:
-      - ohmc_network
-    restart: unless-stopped
+      - db
+      - redis
 
 volumes:
   postgres_data:
-    driver: local
-  media_files:
-    driver: local
-
-networks:
-  ohmc_network:
-    driver: bridge
+  redis_data:
+  static_volume:
+  media_volume:
