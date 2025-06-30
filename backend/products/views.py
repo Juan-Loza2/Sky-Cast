@@ -1,4 +1,3 @@
-
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -12,6 +11,10 @@ from .serializers import (
     ProductCollectionSerializer, WeatherProductDetailSerializer
 )
 from .filters import WeatherProductFilter
+import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ProductTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -152,6 +155,120 @@ class WeatherProductViewSet(viewsets.ReadOnlyModelViewSet):
             'groups': list(grouped.values()),
             'total_products': products.count()
         })
+
+    @action(detail=False, methods=['post'])
+    def cargar_json(self, request):
+        """Carga productos meteorológicos desde un JSON"""
+        try:
+            # Obtener datos del request
+            if request.content_type == 'application/json':
+                data = request.data
+            else:
+                return Response(
+                    {'error': 'Content-Type debe ser application/json'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Validar estructura del JSON
+            if not isinstance(data, list):
+                return Response(
+                    {'error': 'El JSON debe ser una lista de productos'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            created_count = 0
+            updated_count = 0
+            errors = []
+            
+            for product_data in data:
+                try:
+                    # Validar campos requeridos
+                    required_fields = ['title', 'filename', 'file_url', 'file_format', 'product_type_code']
+                    for field in required_fields:
+                        if field not in product_data:
+                            errors.append(f"Producto {product_data.get('title', 'sin título')}: campo '{field}' requerido")
+                            continue
+                    
+                    # Obtener o crear tipo de producto
+                    product_type, created = ProductType.objects.get_or_create(
+                        code=product_data['product_type_code'],
+                        defaults={
+                            'name': product_data.get('product_type_name', f'Producto {product_data["product_type_code"]}'),
+                            'description': product_data.get('product_type_description', ''),
+                            'color': product_data.get('product_type_color', '#3B82F6')
+                        }
+                    )
+                    
+                    # Preparar datos del producto
+                    product_fields = {
+                        'title': product_data['title'],
+                        'filename': product_data['filename'],
+                        'file_url': product_data['file_url'],
+                        'file_format': product_data['file_format'],
+                        'product_type': product_type,
+                        'description': product_data.get('description', ''),
+                        'region': product_data.get('region', ''),
+                        'resolution': product_data.get('resolution', ''),
+                        'is_available': product_data.get('is_available', True)
+                    }
+                    
+                    # Manejar fecha de generación
+                    if 'generated_at' in product_data:
+                        if isinstance(product_data['generated_at'], str):
+                            try:
+                                generated_at = datetime.fromisoformat(product_data['generated_at'].replace('Z', '+00:00'))
+                                if timezone.is_naive(generated_at):
+                                    generated_at = timezone.make_aware(generated_at)
+                                product_fields['generated_at'] = generated_at
+                            except ValueError:
+                                product_fields['generated_at'] = timezone.now()
+                        else:
+                            product_fields['generated_at'] = timezone.now()
+                    else:
+                        product_fields['generated_at'] = timezone.now()
+                    
+                    # Crear o actualizar producto
+                    product, created = WeatherProduct.objects.get_or_create(
+                        filename=product_data['filename'],
+                        product_type=product_type,
+                        defaults=product_fields
+                    )
+                    
+                    if created:
+                        created_count += 1
+                    else:
+                        # Actualizar campos existentes
+                        for field, value in product_fields.items():
+                            if field != 'product_type':  # No actualizar la relación
+                                setattr(product, field, value)
+                        product.save()
+                        updated_count += 1
+                        
+                except Exception as e:
+                    error_msg = f"Error procesando producto {product_data.get('title', 'sin título')}: {str(e)}"
+                    errors.append(error_msg)
+                    logger.error(error_msg)
+            
+            # Preparar respuesta
+            response_data = {
+                'message': 'Carga completada',
+                'created': created_count,
+                'updated': updated_count,
+                'errors': errors
+            }
+            
+            if errors:
+                response_data['message'] = 'Carga completada con errores'
+                return Response(response_data, status=status.HTTP_207_MULTI_STATUS)
+            else:
+                return Response(response_data, status=status.HTTP_201_CREATED)
+                
+        except Exception as e:
+            logger.error(f"Error en carga JSON: {e}")
+            return Response(
+                {'error': f'Error procesando JSON: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class ProductCollectionViewSet(viewsets.ReadOnlyModelViewSet):

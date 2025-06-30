@@ -1,4 +1,3 @@
-
 """
 URL configuration for ohmc_api project.
 """
@@ -8,13 +7,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.http import JsonResponse
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from .admin import admin_site
 
 def health_check(request):
     """Simple health check endpoint"""
     return JsonResponse({'status': 'healthy', 'service': 'ohmc-weather-api'})
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),  # Usar admin personalizado
     path('health/', health_check, name='health_check'),
     
     # API endpoints
