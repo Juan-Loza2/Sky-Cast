@@ -36,17 +36,17 @@ const FWISection = ({ loading: initialLoading }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">🔥 Índice de Peligro de Incendio (FWI)</h2>
-        <p className="text-gray-600">
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
+        <h2 className="text-2xl font-bold text-white mb-2">🔥 Índice de Peligro de Incendio (FWI)</h2>
+        <p className="text-gray-200">
           El Fire Weather Index (FWI) es un sistema de clasificación numérica del peligro de incendio forestal basado en
           las condiciones meteorológicas. Actualizado diariamente a las 11:00 UTC.
         </p>
       </div>
 
       {/* Risk Scale */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">📊 Escala de Riesgo</h3>
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">📊 Escala de Riesgo</h3>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
           {riskLevels.map((risk, index) => (
             <div key={index} className="text-center">
@@ -54,17 +54,17 @@ const FWISection = ({ loading: initialLoading }) => {
                 <div className="font-bold">{risk.level}</div>
                 <div className="text-sm">{risk.range}</div>
               </div>
-              <p className="text-xs text-gray-600">{risk.description}</p>
+              <p className="text-xs text-white">{risk.description}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* FWI Image */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
         <div className="flex items-center space-x-3 mb-4">
           <Flame className="h-6 w-6 text-red-500" />
-          <h3 className="text-lg font-semibold text-gray-800">Mapa Actual de Peligro de Incendio</h3>
+          <h3 className="text-lg font-semibold text-white">Mapa Actual de Peligro de Incendio</h3>
         </div>
 
         {loading ? (

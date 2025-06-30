@@ -13,7 +13,7 @@ const TabNavigation = ({ activeTab, onTabChange, estadisticas }) => {
     },
     {
       id: "FWI",
-      label: "FWI",
+      label: "Incendios",
       icon: Flame,
       description: "Índice de peligro de incendio",
       count: 1,
@@ -35,29 +35,39 @@ const TabNavigation = ({ activeTab, onTabChange, estadisticas }) => {
   ]
 
   return (
-    <div className="card">
+    <div
+      style={{
+        background: '#171F2F99',
+        borderRadius: '1.5rem',
+        boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)',
+        padding: '2rem 1.5rem',
+        marginBottom: '1.5rem',
+      }}
+    >
       <div className="flex flex-wrap gap-3 justify-center">
-        {tabs.map((tab) => {
-          const Icon = tab.icon
-          const isActive = activeTab === tab.id
+        <div className="grid grid-cols-2 gap-3 w-full max-w-md mx-auto">
+          {tabs.map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
 
-          return (
-            <button
-              key={tab.id}
-              onClick={() => onTabChange(tab.id)}
-              className={`
-                tab-button flex items-center space-x-3 min-w-[140px]
-                ${isActive ? "tab-button-active" : "tab-button-inactive"}
-              `}
-            >
-              <Icon className="h-5 w-5" />
-              <div className="text-left">
-                <div className="font-semibold">{tab.label}</div>
-                <div className="text-xs opacity-75">{tab.count} productos</div>
-              </div>
-            </button>
-          )
-        })}
+            return (
+              <button
+                key={tab.id}
+                onClick={() => onTabChange(tab.id)}
+                className={`
+                  tab-button flex items-center space-x-3 w-full
+                  ${isActive ? "tab-button-active" : "tab-button-inactive"}
+                `}
+              >
+                <Icon className="h-5 w-5" />
+                <div className="text-left">
+                  <div className="font-semibold">{tab.label}</div>
+                  <div className="text-xs opacity-75">{tab.count} productos</div>
+                </div>
+              </button>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

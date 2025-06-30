@@ -65,31 +65,31 @@ const GasesSection = ({ loading: initialLoading }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="card">
-        <div className="flex items-center space-x-3 mb-4">
-          <div className="bg-blue-600 p-2 rounded-lg">
-            <Activity className="h-6 w-6 text-white" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Medición de Gases de Efecto Invernadero</h2>
-            <p className="text-gray-600">
-              Visualizaciones diarias de gases de efecto invernadero medidos por el analizador Picarro en el OHMC. Datos
-              actualizados diariamente a las 10:30 h.
-            </p>
-          </div>
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
+        <div className="flex items-center space-x-3 mb-2">
+          <h2 className="text-2xl font-bold text-white flex items-center">
+            <span className="bg-blue-600 p-2 rounded-lg mr-2 flex items-center justify-center">
+              <Activity className="h-6 w-6 text-white" />
+            </span>
+            Medición de Gases de Efecto Invernadero
+          </h2>
         </div>
+        <p className="text-gray-200">
+          Visualizaciones diarias de gases de efecto invernadero medidos por el analizador Picarro en el OHMC. Datos
+          actualizados diariamente a las 10:30 h.
+        </p>
       </div>
 
       {/* Date Selector */}
-      <div className="card">
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
         <div className="flex items-center space-x-3 mb-4">
-          <Calendar className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Seleccionar fecha</h3>
+          <Calendar className="h-5 w-5 text-white" />
+          <h3 className="text-lg font-semibold text-white">Seleccionar fecha</h3>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Fecha</label>
+            <label className="block text-sm font-medium text-white mb-2">Fecha</label>
             <DatePicker
               selected={selectedDate}
               onChange={setSelectedDate}
@@ -102,9 +102,9 @@ const GasesSection = ({ loading: initialLoading }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Fecha seleccionada</label>
-            <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
-              <span className="font-semibold text-blue-800">{format(selectedDate, "dd/MM/yyyy", { locale: es })}</span>
+            <label className="block text-sm font-medium text-white mb-2">Fecha seleccionada</label>
+            <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg w-full h-[48px] flex items-center">
+              <span className="font-semibold text-blue-800 text-left">{format(selectedDate, "dd/MM/yyyy", { locale: es })}</span>
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@ const GasesSection = ({ loading: initialLoading }) => {
           const producto = getImageForGas(gasType)
 
           return (
-            <div key={gasType.id} className="card">
+            <div key={gasType.id} style={{background: (gasType.id === 'CO2' || gasType.id === 'CH4') ? '#171F2F99' : '' , borderRadius: (gasType.id === 'CO2' || gasType.id === 'CH4') ? '1.5rem' : '', boxShadow: (gasType.id === 'CO2' || gasType.id === 'CH4') ? '0 4px 24px 0 rgba(23,31,47,0.10)' : ''}} className={`p-6 ${(gasType.id === 'CO2' || gasType.id === 'CH4') ? '' : 'card'}`}>
               <div className="flex items-center space-x-3 mb-4">
                 <div
                   className={`w-12 h-12 rounded-lg flex items-center justify-center ${gasType.bgColor} border ${gasType.borderColor}`}
@@ -124,12 +124,12 @@ const GasesSection = ({ loading: initialLoading }) => {
                   <Activity className={`h-6 w-6 ${gasType.color}`} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{gasType.name}</h3>
-                  <p className="text-sm text-gray-600">{gasType.symbol}</p>
+                  <h3 className={`text-lg font-semibold ${(gasType.id === 'CO2' || gasType.id === 'CH4') ? 'text-white' : 'text-gray-900'}`}>{gasType.name}</h3>
+                  <p className={`text-sm ${(gasType.id === 'CO2' || gasType.id === 'CH4') ? 'text-white' : 'text-gray-600'}`}>{gasType.symbol}</p>
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600 mb-4">{gasType.description}</p>
+              <p className={`text-sm mb-4 ${(gasType.id === 'CO2' || gasType.id === 'CH4') ? 'text-white' : 'text-gray-600'}`}>{gasType.description}</p>
 
               {loading ? (
                 <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg">

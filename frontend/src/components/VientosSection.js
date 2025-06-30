@@ -28,17 +28,17 @@ const VientosSection = ({ loading: initialLoading }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">🛣️ Ráfagas de Viento en Rutas</h2>
-        <p className="text-gray-600">
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
+        <h2 className="text-2xl font-bold text-white mb-2">🛣️ Ráfagas de Viento en Rutas</h2>
+        <p className="text-gray-200">
           Animación de ráfagas de viento sobre rutas provinciales para apoyo vial. Información actualizada diariamente a
           las 11:00 UTC para la seguridad en el transporte.
         </p>
       </div>
 
       {/* Wind Scale */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">💨 Escala de Intensidad del Viento</h3>
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">💨 Escala de Intensidad del Viento</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-green-50 p-4 rounded-lg border border-green-200">
             <div className="flex items-center space-x-2 mb-2">
@@ -53,8 +53,8 @@ const VientosSection = ({ loading: initialLoading }) => {
 
       {/* Product Display */}
       {producto && (
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Producto de Viento</h3>
+        <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
+          <h3 className="text-lg font-semibold text-white mb-4">Producto de Viento</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <h4 className="text-md font-semibold text-gray-700">Nombre</h4>
@@ -70,16 +70,16 @@ const VientosSection = ({ loading: initialLoading }) => {
 
       {/* Loading Indicator */}
       {loading && (
-        <div className="bg-white rounded-xl shadow-lg p-6 flex justify-center items-center">
-          <span className="text-gray-600">Cargando...</span>
+        <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6 flex justify-center items-center">
+          <span className="text-white">Cargando...</span>
         </div>
       )}
 
       {/* Error Indicator */}
       {!loading && !producto && (
-        <div className="bg-white rounded-xl shadow-lg p-6 flex justify-center items-center">
+        <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6 flex justify-center items-center">
           <AlertTriangle className="h-6 w-6 text-red-600 mr-2" />
-          <span className="text-gray-600">No se pudo cargar la información del viento.</span>
+          <span className="text-white">No se pudo cargar la información del viento.</span>
         </div>
       )}
     </div>

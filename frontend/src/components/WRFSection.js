@@ -132,30 +132,30 @@ const WRFSection = ({ loading: initialLoading }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="card">
-        <div className="flex items-center space-x-3 mb-4">
-          <div className="bg-blue-600 p-2 rounded-lg">
-            <Thermometer className="h-6 w-6 text-white" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Modelo WRF - Córdoba</h2>
-            <p className="text-gray-600">
-              Productos horarios del modelo meteorológico WRF para Córdoba. Actualizaciones diarias a las 06 y 18 UTC.
-            </p>
-          </div>
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
+        <div className="flex items-center space-x-3 mb-2">
+          <h2 className="text-2xl font-bold text-white flex items-center">
+            <span className="bg-blue-600 p-2 rounded-lg mr-2 flex items-center justify-center">
+              <Thermometer className="h-6 w-6 text-white" />
+            </span>
+            Modelo WRF - Córdoba
+          </h2>
         </div>
+        <p className="text-gray-200">
+          Productos horarios del modelo meteorológico WRF para Córdoba. Actualizaciones diarias a las 06 y 18 UTC.
+        </p>
       </div>
 
       {/* Date Selector */}
-      <div className="card">
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
         <div className="flex items-center space-x-3 mb-4">
-          <Calendar className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Seleccionar fecha</h3>
+          <Calendar className="h-5 w-5 text-white" />
+          <h3 className="text-lg font-semibold text-white">Seleccionar fecha</h3>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Fecha</label>
+            <label className="block text-sm font-medium text-white mb-2">Fecha</label>
             <DatePicker
               selected={selectedDate}
               onChange={setSelectedDate}
@@ -168,7 +168,7 @@ const WRFSection = ({ loading: initialLoading }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Fecha seleccionada</label>
+            <label className="block text-sm font-medium text-white mb-2">Fecha seleccionada</label>
             <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
               <span className="font-semibold text-blue-800">{format(selectedDate, "dd/MM/yyyy", { locale: es })}</span>
             </div>
@@ -186,39 +186,38 @@ const WRFSection = ({ loading: initialLoading }) => {
             <button
               key={variable.id}
               onClick={() => setSelectedVariable(variable.id)}
-              className={`
-                variable-card text-left
-                ${isSelected ? `variable-card-selected ${variable.bgColor} ${variable.borderColor}` : ""}
-              `}
+              style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}}
+              className={`text-left w-full p-4 border-2 transition-all duration-200 ${isSelected ? `${variable.borderColor}` : 'border-transparent'}`}
             >
-              <div
-                className={`w-12 h-12 rounded-lg flex items-center justify-center mb-3 ${variable.bgColor} border ${variable.borderColor}`}
-              >
-                <Icon className={`h-6 w-6 ${variable.color}`} />
+              <div className="flex items-center gap-3">
+                <span className={`w-12 h-12 rounded-lg flex items-center justify-center ${variable.bgColor} border ${variable.borderColor}`}>
+                  <Icon className={`h-6 w-6 ${variable.color}`} />
+                </span>
+                <div>
+                  <h3 className="font-semibold text-white mb-1">{variable.name}</h3>
+                  <p className="text-sm text-gray-200">{variable.description}</p>
+                </div>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-1">{variable.name}</h3>
-              <p className="text-sm text-gray-600">{variable.description}</p>
             </button>
           )
         })}
       </div>
 
       {/* Time Selection */}
-      <div className="card">
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
         <div className="flex items-center space-x-3 mb-4">
           <Clock className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Hora de Pronóstico (ARG)</h3>
+          <h3 className="text-lg font-semibold text-white">Hora de Pronóstico (ARG)</h3>
         </div>
 
-        <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
+        <div className="grid grid-cols-5 md:grid-cols-10 gap-2 justify-center text-center">
           {timeSlots.map((time) => (
             <button
               key={time}
               onClick={() => setSelectedTime(time)}
-              className={`
-                time-button
-                ${selectedTime === time ? "time-button-active" : "time-button-inactive"}
-              `}
+              className={
+                `time-button flex items-center justify-center ${selectedTime === time ? "time-button-active" : "time-button-inactive"}`
+              }
             >
               {time}
             </button>
@@ -227,9 +226,9 @@ const WRFSection = ({ loading: initialLoading }) => {
       </div>
 
       {/* Image Display */}
-      <div className="card">
+      <div style={{background: '#171F2F99', borderRadius: '1.5rem', boxShadow: '0 4px 24px 0 rgba(23,31,47,0.10)'}} className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-white">
             {variables.find((v) => v.id === selectedVariable)?.name}
           </h3>
           <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{selectedTime} ARG</span>

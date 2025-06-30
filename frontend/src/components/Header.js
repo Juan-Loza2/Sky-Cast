@@ -2,7 +2,7 @@ import { Cloud, Activity } from "lucide-react"
 
 const Header = () => {
   return (
-    <header className="bg-white border-b border-gray-200 shadow-sm">
+    <header className="shadow-sm backdrop-blur" style={{backgroundColor: "#171F2F99"}}>
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -10,14 +10,14 @@ const Header = () => {
               <Cloud className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">OHMC</h1>
-              <p className="text-gray-600 text-sm">Observatorio Hidrometeorológico</p>
+              <h1 className="text-2xl font-bold text-gray-100">OHMC</h1>
+              <p className="text-gray-300 text-sm">Observatorio Hidrometeorológico</p>
             </div>
           </div>
-          <div className="flex items-center space-x-2 text-gray-600">
+          <div className="flex items-center space-x-2 text-gray-300">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <Activity className="h-5 w-5" />
-            <span className="text-sm font-medium">En vivo</span>
+            <span className="text-sm font-medium whitespace-nowrap">En vivo</span>
           </div>
         </div>
       </div>
