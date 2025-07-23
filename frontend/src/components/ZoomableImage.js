@@ -158,9 +158,15 @@ const ZoomableImage = ({ src, alt, className = "" }) => {
 
         {/* Overlay de zoom */}
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
-          <div className="bg-white rounded-full p-3 shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
+          <button
+            type="button"
+            className="bg-white rounded-full p-3 shadow-lg transform scale-90 group-hover:scale-100 transition-transform focus:outline-none"
+            onClick={openModal}
+            title="Hacer zoom"
+            tabIndex={0}
+          >
             <ZoomIn className="h-6 w-6 text-gray-700" />
-          </div>
+          </button>
         </div>
       </div>
 

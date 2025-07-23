@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
   body {
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
-    background: #ffffff;
+    background: #0a174e;
     min-height: 100vh;
     color: #1f2937;
   }
