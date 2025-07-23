@@ -43,7 +43,7 @@ def download_and_save_image(producto, url):
         return False
 
 @shared_task
-def sync_wrf_data():
+def sync_wrf_data(last_week=False):
     """Sincronizar datos WRF y descargar imágenes"""
     try:
         # Crear o obtener tipo de producto
@@ -62,8 +62,8 @@ def sync_wrf_data():
         hoy = date.today()
         productos_creados = 0
         imagenes_descargadas = 0
-        
-        for dias_atras in range(7):  # Última semana
+        dias = 7 if last_week else 30
+        for dias_atras in range(dias):
             fecha_actual = hoy - timedelta(days=dias_atras)
             
             # Solo procesar días con corridas (6 y 18 UTC)
@@ -127,7 +127,7 @@ def sync_wrf_data():
         raise
 
 @shared_task
-def sync_medicion_aire():
+def sync_medicion_aire(last_week=False):
     """Sincronizar datos de medición de aire y descargar imágenes"""
     try:
         tipo_aire, created = TipoProducto.objects.get_or_create(
@@ -142,8 +142,8 @@ def sync_medicion_aire():
         hoy = date.today()
         productos_creados = 0
         imagenes_descargadas = 0
-        
-        for dias_atras in range(7):  # Última semana
+        dias = 7 if last_week else 30
+        for dias_atras in range(dias):
             fecha_actual = hoy - timedelta(days=dias_atras)
             
             for archivo in archivos:
