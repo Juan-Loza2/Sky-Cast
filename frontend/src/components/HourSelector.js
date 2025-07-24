@@ -48,10 +48,10 @@ const HourSelector = ({ selectedHour, onHourChange, availableHours = [] }) => {
   }
 
   return (
-    <div className="card">
+    <div>
       <div className="flex items-center space-x-3 mb-4">
         <Clock className="h-5 w-5 text-blue-600" />
-        <h3 className="text-lg font-semibold text-gray-900">Hora de Pronóstico (ARG)</h3>
+        <h3 className="text-lg font-semibold text-white">Hora de Pronóstico (ARG)</h3>
         <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
           {hoursWithData.length} horas disponibles
         </span>

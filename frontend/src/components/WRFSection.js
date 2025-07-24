@@ -21,6 +21,7 @@ import { fetchProductos } from "../services/api"
 import ZoomableImage from "./ZoomableImage"
 import HourSelector from "./HourSelector"
 import "react-datepicker/dist/react-datepicker.css"
+import { motion } from "framer-motion"
 
 const WRFSection = ({ loading: initialLoading }) => {
   const [selectedDate, setSelectedDate] = useState(subDays(new Date(), 1))
@@ -383,70 +384,101 @@ const WRFSection = ({ loading: initialLoading }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="card">
-        <div className="flex items-center space-x-3 mb-4">
-          <div className="bg-blue-600 p-2 rounded-lg">
-            <Thermometer className="h-6 w-6 text-white" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Modelo WRF - Córdoba</h2>
-            <p className="text-gray-600">
-              Productos horarios del modelo meteorológico WRF para Córdoba. {variables.length} variables disponibles.
-            </p>
-            {debugInfo && <p className="text-sm text-blue-600 mt-2">Debug: {debugInfo}</p>}
-          </div>
+      <div className="mb-2 flex items-center gap-3">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
+          <Thermometer className="h-7 w-7 text-white" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold mb-1">Modelo WRF</h2>
+          <p className="opacity-90">
+            Pronóstico meteorológico de alta resolución para la provincia de Córdoba. Selecciona la variable y el horario para ver los mapas.
+          </p>
         </div>
       </div>
-
-      {/* Date and Variable Selector */}
-      <div className="grid md:grid-cols-2 gap-6">
+      {/* Variable Selector */}
+      <div className="mb-2">
         {/* Date Selector */}
-        <div className="card">
-          <div className="flex items-center space-x-3 mb-4">
-            <Calendar className="h-5 w-5 text-blue-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Fecha</h3>
+        <div className="flex items-center space-x-3 mb-4">
+          <Calendar className="h-5 w-5 text-blue-600" />
+          <h3 className="text-lg font-semibold text-white">Fecha</h3>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">Seleccionar fecha</label>
+            <DatePicker
+              selected={selectedDate}
+              onChange={setSelectedDate}
+              dateFormat="dd/MM/yyyy"
+              locale={es}
+              maxDate={new Date()} // Solo hasta hoy
+              minDate={new Date(2020, 0, 1)} // Desde 2020 - sin restricciones estrictas
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              showYearDropdown
+              showMonthDropdown
+              dropdownMode="select"
+            />
+            <p className="text-sm text-white mt-1">Selecciona cualquier fecha disponible</p>
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Seleccionar fecha</label>
-              <DatePicker
-                selected={selectedDate}
-                onChange={setSelectedDate}
-                dateFormat="dd/MM/yyyy"
-                locale={es}
-                maxDate={new Date()} // Solo hasta hoy
-                minDate={new Date(2020, 0, 1)} // Desde 2020 - sin restricciones estrictas
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                showYearDropdown
-                showMonthDropdown
-                dropdownMode="select"
-              />
-              <p className="text-sm text-gray-500 mt-1">Selecciona cualquier fecha disponible</p>
-            </div>
-
-            <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
-              <span className="font-semibold text-blue-800">{format(selectedDate, "dd/MM/yyyy", { locale: es })}</span>
-            </div>
+          <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+            <span className="font-semibold text-blue-800">{format(selectedDate, "dd/MM/yyyy", { locale: es })}</span>
           </div>
         </div>
 
+        {/* Espacio entre selector de fecha y variable */}
+        <div className="mt-8" />
+
         {/* Variable Selector - Dropdown */}
-        <div className="card">
-          <div className="flex items-center space-x-3 mb-4">
+        <div>
+          {/* Rediseño avanzado con animaciones */}
+          <motion.div
+            className="flex items-center gap-5 mb-6 p-5 rounded-2xl shadow-2xl"
+            style={{
+              background: 'linear-gradient(120deg, rgba(36,59,107,0.95) 60%, rgba(44,62,80,0.85) 100%)',
+              backdropFilter: 'blur(8px)',
+              border: '1.5px solid #2b3a5e',
+            }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+          >
             {selectedVariableData && (
-              <div
-                className={`w-10 h-10 rounded-lg flex items-center justify-center ${selectedVariableData.bgColor} border ${selectedVariableData.borderColor}`}
+              <motion.div
+                className="bg-gradient-to-br from-blue-600 to-indigo-600 p-4 rounded-full shadow-xl flex items-center justify-center border-4 border-white/10"
+                initial={{ scale: 0.7, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
               >
-                <selectedVariableData.icon className={`h-5 w-5 ${selectedVariableData.color}`} />
-              </div>
+                <selectedVariableData.icon className="h-10 w-10 text-white drop-shadow-lg" />
+              </motion.div>
             )}
-            <h3 className="text-lg font-semibold text-gray-900">Variable Meteorológica</h3>
-          </div>
+            <div className="flex flex-col justify-center">
+              <motion.h3
+                className="text-3xl font-extrabold text-white mb-1 tracking-tight drop-shadow"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              >
+                {selectedVariableData?.name || "Variable Meteorológica"}
+              </motion.h3>
+              {selectedVariableData?.description && (
+                <motion.p
+                  className="text-base text-blue-200 opacity-90 font-medium"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.45, duration: 0.5 }}
+                >
+                  {selectedVariableData.description}
+                </motion.p>
+              )}
+            </div>
+          </motion.div>
+          <motion.hr className="border-blue-900/40 my-4" initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ delay: 0.7, duration: 0.5 }} />
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Seleccionar variable</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Seleccionar variable</label>
               <div className="relative">
                 <select
                   value={selectedVariable}
@@ -543,9 +575,9 @@ const WRFSection = ({ loading: initialLoading }) => {
       <HourSelector selectedHour={selectedTime} onHourChange={setSelectedTime} availableHours={availableHours} />
 
       {/* Image Display */}
-      <div className="card">
+      <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-white">
             {selectedVariableData?.name || "Variable Meteorológica"}
           </h3>
           <div className="flex items-center space-x-2">
@@ -568,7 +600,7 @@ const WRFSection = ({ loading: initialLoading }) => {
               className="w-full"
             />
             <div className="mt-3 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-white">
                 📅 {format(selectedDate, "dd/MM/yyyy")} • 🕐 {selectedTime} ARG • 📊 {selectedVariable.toUpperCase()}
               </p>
               <p className="text-xs text-blue-600 mt-1">

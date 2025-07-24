@@ -1,6 +1,7 @@
 "use client"
 
 import { Thermometer, Flame, Wind, Activity } from "lucide-react"
+import { motion } from "framer-motion"
 
 const TabNavigation = ({ activeTab, onTabChange, estadisticas }) => {
   const tabs = [
@@ -35,26 +36,29 @@ const TabNavigation = ({ activeTab, onTabChange, estadisticas }) => {
   ]
 
   return (
-    <div className="card">
-      <div className="flex flex-wrap gap-3 justify-center">
-        {tabs.map((tab) => {
-          const Icon = tab.icon
-          const isActive = activeTab === tab.id
-
+    <div className="rounded-2xl shadow-2xl p-4 flex justify-center text-white mb-6"
+         style={{ background: '#243b6b', backdropFilter: 'blur(6px)', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.35)' }}>
+      <div className="flex flex-wrap gap-3 justify-center relative">
+        {tabs.map((tab, idx) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`
-                tab-button flex items-center space-x-3 min-w-[140px]
-                ${isActive ? "tab-button-active" : "tab-button-inactive"}
+              className={`relative px-6 py-4 rounded-full font-semibold text-lg md:text-xl flex items-center gap-2 transition-all duration-200 min-w-[140px]
+                ${isActive ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg" : "bg-gray-100 text-gray-700 hover:bg-blue-50"}
               `}
             >
-              <Icon className="h-5 w-5" />
-              <div className="text-left">
-                <div className="font-semibold">{tab.label}</div>
-                <div className="text-xs opacity-75">{tab.description}</div>
-              </div>
+              <Icon className={`h-5 w-5 ${isActive ? "text-white" : "text-blue-600"}`} />
+              <span>{tab.label}</span>
+              {isActive && (
+                <motion.div
+                  layoutId="tab-underline"
+                  className="absolute left-4 right-4 -bottom-1 h-1 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
             </button>
           )
         })}
