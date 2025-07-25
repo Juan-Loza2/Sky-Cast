@@ -26,12 +26,9 @@ def download_and_save_image(producto, url):
             if not filename or '.' not in filename:
                 filename = f"{producto.nombre_archivo}.png"
             
-            # Guardar imagen en el campo foto
-            producto.foto.save(
-                filename,
-                ContentFile(response.content),
-                save=True
-            )
+            # Guardar imagen en el campo url_imagen
+            producto.url_imagen = url
+            producto.save()
             logger.info(f"✅ Imagen guardada: {filename}")
             return True
         else:
@@ -93,7 +90,7 @@ def sync_wrf_data():
                             productos_creados += 1
                         
                         # Descargar imagen si no existe
-                        if not producto.foto:
+                        if not producto.url_imagen:
                             if download_and_save_image(producto, url):
                                 imagenes_descargadas += 1
                         
@@ -163,7 +160,7 @@ def sync_medicion_aire():
                     productos_creados += 1
                 
                 # Descargar imagen si no existe
-                if not producto.foto:
+                if not producto.url_imagen:
                     if download_and_save_image(producto, url):
                         imagenes_descargadas += 1
                 
@@ -207,7 +204,7 @@ def sync_fwi_data():
         
         # Descargar imagen si no existe
         imagenes_descargadas = 0
-        if not producto.foto:
+        if not producto.url_imagen:
             if download_and_save_image(producto, url):
                 imagenes_descargadas = 1
         
@@ -251,7 +248,7 @@ def sync_rutas_caminera():
         
         # Descargar imagen si no existe
         imagenes_descargadas = 0
-        if not producto.foto:
+        if not producto.url_imagen:
             if download_and_save_image(producto, url):
                 imagenes_descargadas = 1
         
@@ -272,7 +269,7 @@ def sync_rutas_caminera():
 def download_missing_images():
     """Descargar imágenes faltantes para productos existentes"""
     try:
-        productos_sin_imagen = Producto.objects.filter(foto__isnull=True).exclude(foto='')
+        productos_sin_imagen = Producto.objects.filter(url_imagen__isnull=True).exclude(url_imagen='')
         total_descargadas = 0
         
         logger.info(f"Encontrados {productos_sin_imagen.count()} productos sin imagen")

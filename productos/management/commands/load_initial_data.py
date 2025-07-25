@@ -80,12 +80,9 @@ class Command(BaseCommand):
                 if not filename or '.' not in filename:
                     filename = f"{producto.nombre_archivo}.png"
                 
-                # Guardar imagen en el campo foto
-                producto.foto.save(
-                    filename,
-                    ContentFile(response.content),
-                    save=True
-                )
+                # Guardar imagen en el campo url_imagen
+                producto.url_imagen = url
+                producto.save()
                 self.stdout.write(self.style.SUCCESS(f'    ✅ Guardada: {filename}'))
                 return True
             elif response.status_code == 404:
@@ -189,7 +186,7 @@ class Command(BaseCommand):
                             productos_creados += 1
                         
                         # Descargar imagen si está habilitado y no existe
-                        if download_images and not producto.foto:
+                        if download_images and not producto.url_imagen:
                             imagenes_intentadas += 1
                             if self.download_and_save_image(producto, url):
                                 imagenes_descargadas += 1
@@ -249,7 +246,7 @@ class Command(BaseCommand):
                     productos_creados += 1
                 
                 # Descargar imagen
-                if download_images and not producto.foto:
+                if download_images and not producto.url_imagen:
                     imagenes_intentadas += 1
                     if self.download_and_save_image(producto, url):
                         imagenes_descargadas += 1
@@ -281,7 +278,7 @@ class Command(BaseCommand):
             producto.save()
         
         imagenes_descargadas = 0
-        if download_images and not producto.foto:
+        if download_images and not producto.url_imagen:
             if self.download_and_save_image(producto, url):
                 imagenes_descargadas = 1
         
@@ -311,7 +308,7 @@ class Command(BaseCommand):
             producto.save()
         
         imagenes_descargadas = 0
-        if download_images and not producto.foto:
+        if download_images and not producto.url_imagen:
             if self.download_and_save_image(producto, url):
                 imagenes_descargadas = 1
         
@@ -330,11 +327,11 @@ class Command(BaseCommand):
         
         for tipo in TipoProducto.objects.all():
             count = tipo.producto_set.count()
-            con_imagen = tipo.producto_set.exclude(foto='').exclude(foto__isnull=True).count()
+            con_imagen = tipo.producto_set.exclude(url_imagen='').exclude(url_imagen__isnull=True).count()
             self.stdout.write(f'  - {tipo.nombre}: {count} productos ({con_imagen} con imagen)')
         
         # Total de imágenes guardadas
-        total_con_imagen = Producto.objects.exclude(foto='').exclude(foto__isnull=True).count()
+        total_con_imagen = Producto.objects.exclude(url_imagen='').exclude(url_imagen__isnull=True).count()
         total_productos = Producto.objects.count()
         self.stdout.write(f'\n📸 Total imágenes guardadas: {total_con_imagen}/{total_productos}')
         
