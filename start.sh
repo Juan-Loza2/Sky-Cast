@@ -200,21 +200,14 @@ docker cp productos/management/__init__.py $(docker-compose ps -q web):/app/prod
 docker cp productos/management/commands/__init__.py $(docker-compose ps -q web):/app/productos/management/commands/ 2>/dev/null || true
 docker cp ohmc_data_structure.json $(docker-compose ps -q web):/app/ 2>/dev/null || true
 
-info "Iniciando descarga de datos e imágenes meteorológicas..."
-info "⚠️ Esto puede tomar varios minutos dependiendo de la conexión a internet..."
-echo ""
+info "Iniciando borrado y carga de datos meteorológicos (sin imágenes)..."
 
-# Ejecutar carga de datos con manejo de errores
-docker-compose exec -T web python manage.py load_from_json \
-    --days=7 \
-    --json-file=ohmc_data_structure.json \
-    --download-images
+# Ejecutar borrado y carga de datos
 
-if [ $? -eq 0 ]; then
-    success "Datos e imágenes meteorológicas cargados correctamente"
-else
-    info "Hubo algunos errores en la descarga, pero continuando..."
-fi
+docker-compose exec web python manage.py borrar_todo
+docker-compose exec web python manage.py cargar_todo
+
+success "Datos meteorológicos cargados correctamente (sin imágenes)"
 
 # Verificar que se cargaron todas las variables
 progress "Verificando variables WRF cargadas..."

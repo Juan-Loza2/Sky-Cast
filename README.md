@@ -41,79 +41,84 @@ JSON (OHMC) → API Django → PostgreSQL → API REST → Frontend React
 - Al menos **4GB de RAM** disponible
 - **Puertos libres**: 8000 (Django), 3000 (React), 5432 (PostgreSQL), 6379 (Redis)
 
+## ⚡ Inicio rápido con start.sh
+
+La forma más sencilla y recomendada de iniciar el proyecto es usando el script `start.sh`, que automatiza toda la instalación y configuración necesaria para el backend, frontend y la carga de datos meteorológicos (sin imágenes).
+
+### 🏁 Pasos para iniciar el proyecto automáticamente
+
+```bash
+# 1. Da permisos de ejecución al script (solo la primera vez)
+chmod +x start.sh
+
+# 2. Ejecuta el script
+./start.sh
+```
+
+### 🔍 ¿Qué hace el script start.sh?
+
+1. **Verifica requisitos previos:** Comprueba que Docker, Docker Compose y Node.js estén instalados y funcionando.
+2. **Limpia instalaciones anteriores:** Detiene y elimina contenedores previos, y limpia recursos de Docker.
+3. **Configura variables de entorno:** Genera automáticamente el archivo `.env` necesario para Django y los servicios.
+4. **Prepara la estructura de directorios:** Crea carpetas y archivos requeridos para comandos personalizados de Django.
+5. **Construye y levanta los servicios Docker:** Backend, base de datos, Redis, etc.
+6. **Espera a que la base de datos esté lista:** Antes de continuar, asegura que PostgreSQL esté disponible.
+7. **Configura Django:** Elimina migraciones viejas, crea nuevas, aplica migraciones y genera un superusuario por defecto (`admin`/`admin123`).
+8. **Carga los datos meteorológicos (sin imágenes):** Ejecuta los comandos personalizados para borrar y cargar datos básicos, sin descargar fotos.
+9. **Configura el frontend (si tienes Node.js):** Instala dependencias de React y deja listo el frontend para iniciar.
+10. **Verifica la instalación:** Comprueba que los servicios estén corriendo y que la API responda correctamente.
+11. **Muestra información útil:** URLs, usuarios, comandos útiles y estadísticas del sistema.
+12. **(Opcional) Pregunta si quieres iniciar el frontend automáticamente.**
+
+---
+
 ## 🛠️ Instalación Paso a Paso
 
-### 1️⃣ Clonar el Repositorio
+## 🚀 ¿Cómo lo levanto?
 
-\`\`\`bash
-git clone <tu-repositorio-url>
-cd SkyCast-f7
-\`\`\`
+1. **Requisitos:**
+   - Docker y Docker Compose
+   - (Opcional) Node.js 18+ para el frontend
 
-### 2️⃣ Configurar Variables de Entorno
+2. **Clona el repo:**
+   ```bash
+   git clone <repo-url>
+   cd Sky-Cast
+   ```
 
-\`\`\`bash
-# Copiar archivo de configuración
-cp .env.example .env
+3. **Ejecuta el instalador:**
+   ```bash
+   chmod +x start.sh
+   ./start.sh
+   ```
 
-# Editar variables si es necesario (opcional)
-nano .env
-\`\`\`
+¡Listo! El script hace todo por vos: prepara la base, instala dependencias, carga datos y deja todo funcionando.
 
-### 3️⃣ Levantar el Backend (Método Corregido)
+---
 
-\`\`\`bash
-# Opción A: Script automático mejorado
-chmod +x scripts/setup_dev_fixed.sh
-./scripts/setup_dev_fixed.sh
+## 🌐 Acceso rápido
 
-# Opción B: Paso a paso manual (si el script falla)
-# 1. Crear archivo .env
-cp .env.example .env  # o crear manualmente si no existe
+- API: [http://localhost:8000/api/](http://localhost:8000/api/)
+- Admin: [http://localhost:8000/admin](http://localhost:8000/admin)
+  - Usuario: `admin` / Contraseña: `admin123`
+- Frontend: [http://localhost:3000](http://localhost:3000) (si tienes Node.js)
 
-# 2. Levantar servicios
-docker-compose down  # limpiar contenedores anteriores
-docker-compose up -d --build
+---
 
-# 3. Esperar y crear migraciones
-sleep 15
-docker-compose exec web python manage.py makemigrations productos
-docker-compose exec web python manage.py migrate
+## 💡 ¿Qué incluye?
+- Backend Django + PostgreSQL
+- Frontend React (opcional)
+- Redis y Celery para tareas
+- Carga automática de datos meteorológicos (sin imágenes)
 
-# 4. Crear superusuario
-docker-compose exec web python manage.py createsuperuser
-\`\`\`
+---
 
-### 4️⃣ Arreglar Migraciones (si hay errores)
+## 📬 Contacto
+¿Dudas o sugerencias? Escribí a tu-email@ejemplo.com
 
-\`\`\`bash
-# Si hay problemas con las migraciones, ejecutar:
-chmod +x scripts/fix_migrations.sh
-./scripts/fix_migrations.sh
-\`\`\`
+---
 
-### 5️⃣ Configurar el Frontend React
-
-\`\`\`bash
-# Navegar a la carpeta frontend
-cd frontend
-
-# Instalar dependencias
-npm install
-
-# Iniciar el servidor de desarrollo
-npm start
-\`\`\`
-
-### 6️⃣ Verificar que Todo Funciona
-
-**Backend Django:**
-- 🌐 API: http://localhost:8000/api/
-- 🔧 Admin: http://localhost:8000/admin
-- 👤 Usuario: `admin` / Contraseña: `admin123`
-
-**Frontend React:**
-- ⚛️ Aplicación: http://localhost:3000
+✨ ¡Listo para usar y modificar! ✨
 
 ## 🎯 Uso del Sistema
 
@@ -149,200 +154,3 @@ npm start
 | `GET` | `/api/estadisticas/` | Estadísticas generales | - |
 | `GET` | `/api/productos/fecha-hora/` | WRF por fecha/hora específica | `?fecha=2025-06-30&hora=12:00` |
 
-### Filtros Disponibles
-
-\`\`\`bash
-# Por tipo de producto
-curl "http://localhost:8000/api/productos/?tipo=wrf_cba"
-
-# Por fecha
-curl "http://localhost:8000/api/productos/?fecha=2025-06-30"
-
-# Por variable (WRF)
-curl "http://localhost:8000/api/productos/?variable=t2"
-
-# Combinados
-curl "http://localhost:8000/api/productos/?tipo=wrf_cba&fecha=2025-06-30&variable=t2"
-\`\`\`
-
-## 🔧 Comandos Útiles
-
-### Docker y Servicios
-
-\`\`\`bash
-# Ver estado de contenedores
-docker-compose ps
-
-# Ver logs en tiempo real
-docker-compose logs -f web
-docker-compose logs -f celery
-
-# Reiniciar servicios
-docker-compose restart
-
-# Parar todos los servicios
-docker-compose down
-
-# Parar y eliminar volúmenes (⚠️ CUIDADO: Borra la BD)
-docker-compose down -v
-\`\`\`
-
-### Django Management
-
-\`\`\`bash
-# Acceder al shell de Django
-docker-compose exec web python manage.py shell
-
-# Crear superusuario adicional
-docker-compose exec web python manage.py createsuperuser
-
-# Ejecutar migraciones manualmente
-docker-compose exec web python manage.py migrate
-
-# Sincronizar datos meteorológicos
-docker-compose exec web python manage.py sync_weather_data
-
-# Sincronizar tipo específico
-docker-compose exec web python manage.py sync_weather_data --type wrf
-\`\`\`
-
-### Base de Datos
-
-\`\`\`bash
-# Acceder a PostgreSQL
-docker-compose exec db psql -U postgres -d weather_db
-
-# Backup de la base de datos
-docker-compose exec db pg_dump -U postgres weather_db > backup.sql
-
-# Restaurar backup
-docker-compose exec -T db psql -U postgres weather_db < backup.sql
-\`\`\`
-
-## 🐛 Troubleshooting
-
-### Problemas Comunes
-
-#### ❌ Error: "relation does not exist"
-\`\`\`bash
-# Solución: Crear y aplicar migraciones
-docker-compose exec web python manage.py makemigrations productos
-docker-compose exec web python manage.py migrate
-\`\`\`
-
-#### ❌ Error: "Port already in use"
-\`\`\`bash
-# Verificar qué proceso usa el puerto
-sudo lsof -i :8000
-
-# Cambiar puerto en docker-compose.yml
-ports:
-  - "8001:8000"  # Cambiar 8000 por 8001
-\`\`\`
-
-#### ❌ Frontend no se conecta al backend
-\`\`\`bash
-# Verificar que el backend esté corriendo
-curl http://localhost:8000/api/productos/
-
-# Verificar proxy en frontend/package.json
-"proxy": "http://localhost:8000"
-\`\`\`
-
-#### ❌ Celery no funciona
-\`\`\`bash
-# Verificar Redis
-docker-compose exec redis redis-cli ping
-
-# Reiniciar Celery
-docker-compose restart celery celery-beat
-\`\`\`
-
-### Logs de Depuración
-
-\`\`\`bash
-# Ver todos los logs
-docker-compose logs
-
-# Logs específicos con timestamps
-docker-compose logs -f -t web
-
-# Últimas 100 líneas
-docker-compose logs --tail=100 web
-\`\`\`
-
-### 🚨 Si Sigues Teniendo Problemas con Migraciones
-
-\`\`\`bash
-# Script de reparación completa
-chmod +x scripts/fix_migrations_complete.sh
-./scripts/fix_migrations_complete.sh
-\`\`\`
-
-## 🚀 Producción
-
-### Despliegue con Docker Swarm
-
-\`\`\`bash
-# Inicializar Docker Swarm
-docker swarm init
-
-# Configurar variables de entorno
-export DB_PASSWORD=tu-password-seguro
-export SECRET_KEY=tu-secret-key-seguro
-
-# Construir y desplegar
-chmod +x scripts/build_and_deploy.sh
-./scripts/build_and_deploy.sh
-\`\`\`
-
-### Variables de Entorno para Producción
-
-\`\`\`bash
-# .env para producción
-DEBUG=False
-SECRET_KEY=tu-secret-key-muy-seguro
-DB_PASSWORD=password-muy-seguro
-ALLOWED_HOSTS=tu-dominio.com,www.tu-dominio.com
-\`\`\`
-
-## 📈 Monitoreo
-
-### Servicios Activos
-
-\`\`\`bash
-# Estado de servicios Docker Swarm
-docker service ls
-
-# Logs de producción
-docker service logs weather-stack_web
-\`\`\`
-
-### Métricas
-
-- **📊 Admin Django**: Estadísticas en tiempo real
-- **🔍 API Status**: `/api/estadisticas/`
-- **💾 Base de Datos**: Consultas de rendimiento
-- **⚡ Redis**: Monitoreo de tareas
-
-## 🤝 Contribuir
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
-
-## 📞 Soporte
-
-- **🐛 Issues**: [GitHub Issues](link-to-issues)
-- **📧 Email**: tu-email@ejemplo.com
-- **📖 Documentación**: [Wiki del proyecto](link-to-wiki)
-
----
-
-**🌟 ¡Gracias por usar OHMC Weather API!**
