@@ -409,7 +409,7 @@ const WRFSection = ({ loading: initialLoading }) => {
               </motion.h3>
               {selectedVariableData?.description && (
                 <motion.p
-                  className="text-base text-blue-200 opacity-90 font-medium"
+                  className="text-base text-[var(--color-text)]-200 opacity-90 font-medium"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.45, duration: 0.5 }}
