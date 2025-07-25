@@ -63,13 +63,13 @@ const Header = () => {
                 >
                   <button
                     className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
-                    onClick={() => { navigate('/'); setOpen(false); }}
+                    onClick={() => { navigate('/datos-meteorologicos'); setOpen(false); }}
                   >
                     Datos Meteorológicos
                   </button>
                   <button
                     className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
-                    onClick={() => { navigate('/landing'); setOpen(false); }}
+                    onClick={() => { navigate('/'); setOpen(false); }}
                   >
                     Productos Meteorológicos
                   </button>
