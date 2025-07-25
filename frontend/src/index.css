@@ -2,6 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Variables de tema */
+:root {
+  --color-bg: #fff;
+  --color-bg-secondary: #f3f4f6;
+  --color-text: #1e293b;
+  --color-primary: #2563eb;
+  --color-primary-dark: #1e40af;
+  --color-accent: #6366f1;
+  --color-card: #fff;
+  --color-border: #cbd5e1;
+}
+[data-theme="dark"] {
+  --color-bg: #0a174e;
+  --color-bg-secondary: #162a5e;
+  --color-text: #f1f5f9;
+  --color-primary: #3b82f6;
+  --color-primary-dark: #1e40af;
+  --color-accent: #818cf8;
+  --color-card: #223366;
+  --color-border: #223366;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.button, .tab-button, .time-button {
+  background: var(--color-card);
+  color: var(--color-text);
+  border: 1.5px solid var(--color-border);
+  transition: background 0.2s, color 0.2s;
+}
+.button-primary, .tab-button-active, .time-button-active {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  color: #fff;
+  border: 1.5px solid var(--color-primary-dark);
+}
+.button:hover, .tab-button:hover, .time-button:hover {
+  background: var(--color-bg-secondary);
+}
+.input, .dropdown {
+  background: var(--color-card);
+  color: var(--color-text);
+  border: 1.5px solid var(--color-border);
+}
+
 @layer base {
   html, body {
     margin: 0;

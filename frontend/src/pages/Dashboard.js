@@ -51,8 +51,8 @@ const Dashboard = () => {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: 'easeOut' }}
-        className="rounded-2xl shadow-2xl p-6 min-h-[320px] text-white"
-        style={{ background: '#243b6b', backdropFilter: 'blur(6px)', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.35)' }}
+        className="rounded-2xl shadow-2xl p-6 min-h-[320px] text-[var(--color-text)]"
+        style={{ background: '[var(--color-bg)]', backdropFilter: 'blur(6px)', boxShadow: '0 8px 12px 0 rgba(0,0,0,0.35)' }}
       >
         {SectionComponent}
       </motion.div>

@@ -37,6 +37,7 @@ const WRFSection = ({ loading: initialLoading }) => {
   const [showDateDropdown, setShowDateDropdown] = useState(false);
 
   // TODAS las variables WRF disponibles según el JSON
+  const variables_permitidas = ["t2", "ppnaccum", "rh2", "max_dbz", "wdir10", "wspd10"];
   const variables = [
     {
       id: "t2",
@@ -45,78 +46,8 @@ const WRFSection = ({ loading: initialLoading }) => {
       color: "text-orange-600",
       bgColor: "bg-orange-50",
       borderColor: "border-orange-200",
-      description: "Temperatura del aire a 2 metros sobre el suelo (°C)",
+      description: "Temperatura del aire a 2 metros sobre el suelo, expresada en grados Celsius (°C). Es fundamental para evaluar el confort térmico y el riesgo de heladas o calor extremo.",
       category: "Temperatura",
-    },
-    {
-      id: "cl",
-      name: "Cobertura Nubosa",
-      icon: Eye,
-      color: "text-gray-600",
-      bgColor: "bg-gray-50",
-      borderColor: "border-gray-200",
-      description: "Fracción de cobertura nubosa total",
-      category: "Nubes",
-    },
-    {
-      id: "ctt",
-      name: "Temperatura Tope Nubes",
-      icon: CloudRain,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-200",
-      description: "Temperatura en el tope de las nubes (°C)",
-      category: "Nubes",
-    },
-    {
-      id: "dbz_altura",
-      name: "Reflectividad en Altura",
-      icon: Activity,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
-      borderColor: "border-purple-200",
-      description: "Simulación de reflectividad radar (dBZ) a diferentes niveles",
-      category: "Radar",
-    },
-    {
-      id: "hail",
-      name: "Granizo",
-      icon: Snowflake,
-      color: "text-cyan-600",
-      bgColor: "bg-cyan-50",
-      borderColor: "border-cyan-200",
-      description: "Probabilidad o intensidad de granizo",
-      category: "Precipitación",
-    },
-    {
-      id: "max_dbz",
-      name: "Reflectividad Máxima",
-      icon: Zap,
-      color: "text-yellow-600",
-      bgColor: "bg-yellow-50",
-      borderColor: "border-yellow-200",
-      description: "Máxima reflectividad radar en la columna (dBZ)",
-      category: "Radar",
-    },
-    {
-      id: "mcape",
-      name: "CAPE Máximo",
-      icon: Activity,
-      color: "text-red-600",
-      bgColor: "bg-red-50",
-      borderColor: "border-red-200",
-      description: "Energía potencial convectiva disponible máxima (J/kg)",
-      category: "Convección",
-    },
-    {
-      id: "ppn",
-      name: "Precipitación Horaria",
-      icon: CloudRain,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-200",
-      description: "Tasa instantánea de precipitación (mm/h)",
-      category: "Precipitación",
     },
     {
       id: "ppnaccum",
@@ -125,7 +56,7 @@ const WRFSection = ({ loading: initialLoading }) => {
       color: "text-blue-700",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
-      description: "Acumulado total de precipitación desde el inicio (mm)",
+      description: "Suma total de la precipitación (lluvia) caída desde el inicio de la corrida del modelo, en milímetros (mm). Permite estimar acumulados de lluvia en un periodo.",
       category: "Precipitación",
     },
     {
@@ -135,28 +66,18 @@ const WRFSection = ({ loading: initialLoading }) => {
       color: "text-purple-600",
       bgColor: "bg-purple-50",
       borderColor: "border-purple-200",
-      description: "Porcentaje de humedad relativa a 2 metros",
+      description: "Porcentaje de humedad relativa del aire a 2 metros de altura. Indica cuán saturado está el aire de vapor de agua, clave para evaluar sensación térmica y riesgo de nieblas.",
       category: "Humedad",
     },
     {
-      id: "riesgos_vientos",
-      name: "Riesgo por Viento",
-      icon: Wind,
-      color: "text-red-600",
-      bgColor: "bg-red-50",
-      borderColor: "border-red-200",
-      description: "Áreas con riesgo de viento fuerte o ráfagas intensas",
-      category: "Viento",
-    },
-    {
-      id: "snow",
-      name: "Nieve",
-      icon: Snowflake,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-200",
-      description: "Acumulación de nieve o probabilidad de nevadas",
-      category: "Precipitación",
+      id: "max_dbz",
+      name: "Reflectividad Máxima",
+      icon: Zap,
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-50",
+      borderColor: "border-yellow-200",
+      description: "Valor máximo de reflectividad radar simulado por el modelo (dBZ). Se asocia a la intensidad de la precipitación y la presencia de tormentas fuertes.",
+      category: "Radar",
     },
     {
       id: "wdir10",
@@ -165,7 +86,7 @@ const WRFSection = ({ loading: initialLoading }) => {
       color: "text-green-600",
       bgColor: "bg-green-50",
       borderColor: "border-green-200",
-      description: "Dirección desde donde sopla el viento (°) a 10m",
+      description: "Dirección desde la cual sopla el viento a 10 metros de altura, expresada en grados. Útil para navegación, agricultura y prevención de incendios.",
       category: "Viento",
     },
     {
@@ -175,20 +96,10 @@ const WRFSection = ({ loading: initialLoading }) => {
       color: "text-green-600",
       bgColor: "bg-green-50",
       borderColor: "border-green-200",
-      description: "Velocidad del viento (m/s) a 10 m de altura",
+      description: "Velocidad del viento a 10 metros de altura, en metros por segundo (m/s). Importante para evaluar riesgos de ráfagas, dispersión de contaminantes y seguridad.",
       category: "Viento",
     },
-    {
-      id: "wspd_altura",
-      name: "Velocidad Viento en Altura",
-      icon: Wind,
-      color: "text-green-700",
-      bgColor: "bg-green-50",
-      borderColor: "border-green-300",
-      description: "Velocidad del viento a diferentes niveles de altura",
-      category: "Viento",
-    },
-  ]
+  ].filter(v => variables_permitidas.includes(v.id));
 
   useEffect(() => {
     loadWRFData()
@@ -388,8 +299,23 @@ const WRFSection = ({ loading: initialLoading }) => {
   // Obtener la variable seleccionada
   const selectedVariableData = variables.find((v) => v.id === selectedVariable)
 
+  const variableGroups = [
+    { label: "🌡️ Temperatura", category: "Temperatura" },
+    { label: "🌧️ Precipitación", category: "Precipitación" },
+    { label: "💨 Viento", category: "Viento" },
+    { label: "📡 Radar", category: "Radar" },
+    { label: "💧 Humedad", category: "Humedad" },
+  ];
+
+  const variableGroupsWithOptions = variableGroups
+    .map(group => ({
+      ...group,
+      options: variables.filter(v => v.category === group.category)
+    }))
+    .filter(group => group.options.length > 0);
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-[var(--color-text)]">
       {/* Header */}
       <div className="mb-2 flex items-center gap-3">
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
@@ -398,25 +324,27 @@ const WRFSection = ({ loading: initialLoading }) => {
         <div>
           <h2 className="text-2xl font-bold mb-1">Modelo WRF</h2>
           <p className="opacity-90">
-            Pronóstico meteorológico de alta resolución para la provincia de Córdoba. Selecciona la variable y el horario para ver los mapas.
+            El <b>Modelo WRF (Weather Research and Forecasting)</b> es un sistema numérico avanzado utilizado para simular y predecir el estado de la atmósfera. En esta plataforma, se generan pronósticos meteorológicos de alta resolución especialmente adaptados para la provincia de Córdoba, con actualizaciones diarias y dos corridas principales por día (mañana y noche).<br/>
+            <br/>
+            Selecciona la variable meteorológica y el horario de interés para visualizar mapas interactivos con los resultados del modelo, útiles para el monitoreo, la toma de decisiones y la prevención de eventos meteorológicos adversos.
           </p>
         </div>
       </div>
       {/* Variable Selector */}
-      <div className="mb-2">
+      <div className="mb-2 text-[var(--color-text)]">
         {/* Date Selector */}
-        <div className="flex items-center space-x-3 mb-4">
+        <div className="flex items-center space-x-3 mb-4 text-[var(--color-text)]">
           <Calendar className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-white">Fecha</h3>
+          <h3 className="text-lg font-semibold text-[var(--color-text)]">Fecha</h3>
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-white mb-2">Seleccionar fecha</label>
+            <label className="block text-sm font-medium text-[var(--color-text)] mb-2">Seleccionar fecha</label>
             <div className="relative">
               <button
                 type="button"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white pr-10 flex items-center gap-2 text-gray-900 text-left"
+                className="w-full input p-3 rounded-lg pr-10 flex items-center gap-2 text-left text-[var(--color-text)]"
                 onClick={() => setShowDateDropdown((v) => !v)}
               >
                 <Calendar className="h-5 w-5 text-blue-600 mr-2" />
@@ -424,7 +352,7 @@ const WRFSection = ({ loading: initialLoading }) => {
                 <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
               </button>
               {showDateDropdown && (
-                <div className="absolute z-50 mt-2 w-full rounded-lg p-0 shadow-xl">
+                <div className="absolute z-50 mt-2 w-full rounded-lg p-0 ">
                   <DatePicker
                     selected={selectedDate}
                     onChange={(date) => { setSelectedDate(date); setShowDateDropdown(false); }}
@@ -451,9 +379,8 @@ const WRFSection = ({ loading: initialLoading }) => {
         <div>
           {/* Rediseño avanzado con animaciones */}
           <motion.div
-            className="flex items-center gap-5 mb-6 p-5 rounded-2xl shadow-2xl"
+            className="flex items-center gap-5 mb-6 p-5 rounded-2xl bg-[var(--color-card)] text-[var(--color-text)]"
             style={{
-              background: 'linear-gradient(120deg, rgba(36,59,107,0.95) 60%, rgba(44,62,80,0.85) 100%)',
               backdropFilter: 'blur(8px)',
               border: '1.5px solid #2b3a5e',
             }}
@@ -463,7 +390,7 @@ const WRFSection = ({ loading: initialLoading }) => {
           >
             {selectedVariableData && (
               <motion.div
-                className="bg-gradient-to-br from-blue-600 to-indigo-600 p-4 rounded-full shadow-xl flex items-center justify-center border-4 border-white/10"
+                className="bg-gradient-to-br from-blue-600 to-indigo-600 p-4 rounded-full flex items-center justify-center border-4 border-white/10 text-[var(--color-text)]"
                 initial={{ scale: 0.7, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
@@ -471,9 +398,9 @@ const WRFSection = ({ loading: initialLoading }) => {
                 <selectedVariableData.icon className="h-10 w-10 text-white drop-shadow-lg" />
               </motion.div>
             )}
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col justify-center text-[var(--color-text)]">
               <motion.h3
-                className="text-3xl font-extrabold text-white mb-1 tracking-tight drop-shadow"
+                className="text-3xl font-extrabold text-[var(--color-text)] mb-1 tracking-tight drop-shadow"
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
@@ -496,11 +423,11 @@ const WRFSection = ({ loading: initialLoading }) => {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Seleccionar variable</label>
+              <label className="block text-sm font-medium text-[var(--color-text)] mb-2">Seleccionar variable</label>
               <div className="relative">
                 <button
                   type="button"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white pr-10 flex items-center gap-2 text-gray-900 text-left"
+                  className="w-full input p-3 rounded-lg pr-10 flex items-center gap-2 text-left"
                   onClick={() => setShowVariableDropdown((v) => !v)}
                 >
                   {selectedVariableData && (
@@ -510,23 +437,15 @@ const WRFSection = ({ loading: initialLoading }) => {
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
                 </button>
                 {showVariableDropdown && (
-                  <div className="absolute z-50 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 max-h-72 overflow-y-auto">
-                    {[
-                      { label: "🌡️ Temperatura", options: variables.filter((v) => v.category === "Temperatura") },
-                      { label: "🌧️ Precipitación", options: variables.filter((v) => v.category === "Precipitación") },
-                      { label: "💨 Viento", options: variables.filter((v) => v.category === "Viento") },
-                      { label: "☁️ Nubes", options: variables.filter((v) => v.category === "Nubes") },
-                      { label: "📡 Radar", options: variables.filter((v) => v.category === "Radar") },
-                      { label: "💧 Humedad", options: variables.filter((v) => v.category === "Humedad") },
-                      { label: "⚡ Convección", options: variables.filter((v) => v.category === "Convección") },
-                    ].map((group) => (
+                  <div className="absolute z-50 mt-2 w-full rounded-lg shadow-lg border border-gray-200 max-h-72 overflow-y-auto">
+                    {variableGroupsWithOptions.map((group) => (
                       <div key={group.label}>
                         <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50">{group.label}</div>
                         {group.options.map((variable) => (
                           <button
                             key={variable.id}
                             onClick={() => { setSelectedVariable(variable.id); setShowVariableDropdown(false); }}
-                            className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-blue-50 transition ${selectedVariable === variable.id ? 'bg-blue-100 text-blue-700 font-bold' : 'text-gray-700'}`}
+                            className={`w-full flex items-center gap-2 px-4 py-2 text-sm button transition ${selectedVariable === variable.id ? 'button-primary font-bold' : ''}`}
                           >
                             <variable.icon className="h-4 w-4 mr-2" />
                             {variable.name}
@@ -538,35 +457,21 @@ const WRFSection = ({ loading: initialLoading }) => {
                 )}
               </div>
             </div>
-
-            {selectedVariableData && (
-              <div className="bg-gray-50 border border-gray-200 p-3 rounded-lg">
-                <p className="text-sm text-gray-700">{selectedVariableData.description}</p>
-                <div className="flex items-center space-x-2 mt-2">
-                  <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded">
-                    {selectedVariableData.category}
-                  </span>
-                  <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
-                    {selectedVariable.toUpperCase()}
-                  </span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
 
       {/* Hour Selector with Navigation */}
-      <HourSelector selectedHour={selectedTime} onHourChange={setSelectedTime} availableHours={availableHours} />
+      <HourSelector selectedHour={selectedTime} onHourChange={setSelectedTime} availableHours={availableHours} textColor="text-[var(--color-text)]"/>
 
       {/* Image Display */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">
+          <h3 className="text-lg font-semibold text-[var(--color-text)]">
             {selectedVariableData?.name || "Variable Meteorológica"}
           </h3>
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{selectedTime} ARG</span>
+            <span className="text-sm text-[var(--color-text)] bg-[var(--color-bg)] px-3 py-1 rounded-full">{selectedTime} ARG</span>
             {currentImage && (
               <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">🔍 Click para zoom</span>
             )}
@@ -574,7 +479,7 @@ const WRFSection = ({ loading: initialLoading }) => {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-center h-96 bg-[var(--color-bg)] rounded-lg">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : currentImage ? (
@@ -585,24 +490,24 @@ const WRFSection = ({ loading: initialLoading }) => {
               className="w-full"
             />
             <div className="mt-3 text-center">
-              <p className="text-sm text-white">
+              <p className="text-sm text-[var(--color-text)]">
                 📅 {format(selectedDate, "dd/MM/yyyy")} • 🕐 {selectedTime} ARG • 📊 {selectedVariable.toUpperCase()}
               </p>
-              <p className="text-xs text-blue-600 mt-1">
+              <p className="text-xs text-[var(--color-text)]-600 mt-1">
                 💡 Haz click en la imagen para hacer zoom y explorar en detalle
               </p>
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+          <div className="flex items-center justify-center h-96 bg-[var(--color-bg)] rounded-lg border-2 border-dashed border-[var(--color-border)]">
             <div className="text-center">
-              <AlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-500 mb-2">No hay datos disponibles para la fecha y hora seleccionadas</p>
-              <p className="text-sm text-gray-400">
+              <AlertTriangle className="h-12 w-12 text-[var(--color-text)] mx-auto mb-2" />
+              <p className="text-[var(--color-text)] mb-2">No hay datos disponibles para la fecha y hora seleccionadas</p>
+              <p className="text-sm text-[var(--color-text)]">
                 Productos encontrados: {productos.length} | Fecha: {format(selectedDate, "dd/MM/yyyy")} | Variable:{" "}
                 {selectedVariable} | Hora: {selectedTime}
               </p>
-              <p className="text-xs text-gray-400 mt-2">Horas disponibles: {availableHours.join(", ") || "Ninguna"}</p>
+                <p className="text-xs text-[var(--color-text)] mt-2">Horas disponibles: {availableHours.join(", ") || "Ninguna"}</p>
             </div>
           </div>
         )}

@@ -66,15 +66,15 @@ function WidgetCarousel() {
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: 'easeOut' }}
-                className="rounded-2xl shadow-2xl p-6 w-full flex items-center gap-5 min-h-[120px] bg-[#223366]/80 backdrop-blur-lg"
+                className="rounded-2xl shadow-2xl p-6 border border-[var(--color-border)] bg-[var(--color-card)] text-[var(--color-text)] rounded-xl w-full flex items-center gap-5 min-h-[120px] backdrop-blur-lg"
                 style={{ boxShadow: '0 8px 32px 0 rgba(0,0,0,0.35)' }}
               >
                 <div className={`flex-shrink-0 bg-gradient-to-br ${widget.iconBg} p-4 rounded-full shadow-lg flex items-center justify-center`}>
                   <Icon className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex flex-col justify-center">
-                  <span className="text-2xl font-extrabold text-white mb-1 leading-tight">{widget.title}</span>
-                  <span className="text-blue-100 text-base font-medium leading-snug">{widget.description}</span>
+                  <span className="text-2xl font-extrabold text-[var(--color-text)] mb-1 leading-tight">{widget.title}</span>
+                  <span className="text-[var(--color-text)] text-base font-medium leading-snug">{widget.description}</span>
                 </div>
               </motion.div>
             </SwiperSlide>
@@ -90,7 +90,7 @@ function WidgetCarousel() {
 function Landing() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a174e]">
+    <div className="min-h-screen flex flex-col bg-[var(--color-bg)]">
       <Header />
       <main className="container mx-auto px-4 py-6 pt-32 flex-1">
         {/* Hero */}
@@ -99,15 +99,15 @@ function Landing() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="text-4xl md:text-5xl font-extrabold text-white mb-4 drop-shadow"
+            className="text-4xl md:text-5xl font-extrabold text-[var(--color-text)] mb-4 drop-shadow"
           >
-            Bienvenido a <span className="text-blue-200">Sky Cast</span>
+            Bienvenido a <span className="text-base-200 font-semibold" style={{ color: 'var(--color-primary)' }}>Sky Cast</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: 'easeOut' }}
-            className="text-lg md:text-xl text-blue-100 mb-6 max-w-2xl mx-auto"
+            className="text-lg md:text-xl text-[var(--color-text)] mb-6 max-w-2xl mx-auto"
           >
             Monitoreo meteorológico avanzado, visualizaciones interactivas y datos ambientales en tiempo real para Córdoba y la región.
           </motion.p>
@@ -126,14 +126,14 @@ function Landing() {
 
         {/* Carrusel de widgets */}
         <section className="mb-16">
-          <h2 className="text-2xl font-bold text-white mb-8 text-center">Nuestros Servicios</h2>
+          <h2 className="text-2xl font-bold text-[var(--color-text)] mb-8 text-center">Nuestros Servicios</h2>
           <WidgetCarousel />
         </section>
 
         {/* Por qué elegirnos */}
         <section className="mb-16">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">¿Por qué elegirnos?</h2>
-          <ul className="list-disc list-inside text-blue-100 max-w-xl mx-auto text-lg space-y-2">
+          <h2 className="text-2xl font-bold text-[var(--color-text)] mb-6 text-center">¿Por qué elegirnos?</h2>
+          <ul className="list-disc list-inside text-[var(--color-text)] max-w-xl mx-auto text-lg space-y-2">
             <li>Datos en tiempo real y alta resolución</li>
             <li>Visualizaciones interactivas y modernas</li>
             <li>Acceso gratuito y abierto</li>
@@ -142,53 +142,14 @@ function Landing() {
           </ul>
         </section>
 
-        {/* Testimonios */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-white mb-8 text-center">Testimonios</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "María G.",
-                text: "La plataforma Sky Cast me permite planificar mis actividades rurales con información confiable y actualizada.",
-                role: "Productora Agropecuaria"
-              },
-              {
-                name: "Ing. Pablo R.",
-                text: "El monitoreo de vientos y FWI es clave para la seguridad vial y la prevención de incendios.",
-                role: "Ingeniero Caminero"
-              },
-              {
-                name: "Dra. Lucía S.",
-                text: "La visualización de gases atmosféricos es una herramienta fundamental para la investigación ambiental.",
-                role: "Investigadora U.N.C."
-              }
-            ].map((t, i) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + i * 0.15, duration: 0.7, ease: 'easeOut' }}
-                className="rounded-2xl shadow-lg p-6 bg-[#223366] text-white flex flex-col items-center"
-                style={{ backdropFilter: 'blur(4px)' }}
-              >
-                <div className="text-3xl mb-2">“</div>
-                <div className="text-blue-100 text-center mb-2">{t.text}</div>
-                <div className="font-bold text-blue-200">{t.name}</div>
-                <div className="text-blue-300 text-sm">{t.role}</div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
         {/* Contacto */}
         <section className="mb-12 text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Contacto</h2>
-          <p className="text-blue-100 mb-2">info@ohmc.com</p>
-          <a href="mailto:info@ohmc.com" className="inline-block px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow hover:from-blue-700 hover:to-indigo-700 transition">Enviar Email</a>
+          <h2 className="text-2xl font-bold text-[var(--color-text)] mb-4">Contacto</h2>
+          <p className="text-[var(--color-text)] mb-2">info@ohmc.com</p>
+          <a href="mailto:info@ohmc.com" className="inline-block px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-[var(--color-text)] font-semibold shadow hover:from-blue-700 hover:to-indigo-700 transition">Enviar Email</a>
         </section>
       </main>
-      <div className="w-full h-24 bg-gradient-to-b from-[#0a174e] to-[#1e293b]" />
-      <footer className="bg-[#1e293b] text-white py-12 w-full mt-auto">
+      <footer className="bg-[var(--color-bg)] text-[var(--color-text)] py-12 w-full mt-auto">
         <div className="grid md:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8">
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
@@ -236,7 +197,7 @@ function Landing() {
 // Componente Dashboard con Header
 const DashboardWithHeader = () => {
   return (
-    <div className="min-h-screen bg-[#0a174e]">
+    <div className="min-h-screen flex flex-col bg-[var(--color-bg)]">
       <Header />
       <main className="container mx-auto px-4 py-6 pt-32">
         <Dashboard />

@@ -39,10 +39,10 @@ const HourSelector = ({ selectedHour, onHourChange, availableHours = [] }) => {
       <div className="card">
         <div className="flex items-center space-x-3 mb-4">
           <Clock className="h-5 w-5 text-gray-400" />
-          <h3 className="text-lg font-semibold text-gray-500">Hora de Pronóstico</h3>
-          <span className="text-sm text-gray-400 bg-gray-100 px-2 py-1 rounded">No hay horas disponibles</span>
+          <h3 className="text-lg font-semibold text-[var(--color-text)]-500">Hora de Pronóstico</h3>
+          <span className="text-sm text-[var(--color-text)] bg-[var(--color-bg)] px-2 py-1 rounded">No hay horas disponibles</span>
         </div>
-        <div className="text-center py-8 text-gray-500">Selecciona una fecha con datos disponibles</div>
+        <div className="text-center py-8 text-[var(--color-text)]">Selecciona una fecha con datos disponibles</div>
       </div>
     )
   }
@@ -51,7 +51,7 @@ const HourSelector = ({ selectedHour, onHourChange, availableHours = [] }) => {
     <div>
       <div className="flex items-center space-x-3 mb-4">
         <Clock className="h-5 w-5 text-blue-600" />
-        <h3 className="text-lg font-semibold text-white">Hora de Pronóstico (ARG)</h3>
+        <h3 className="text-lg font-semibold text-[var(--color-text)]">Hora de Pronóstico (ARG)</h3>
         <span className="text-sm font-semibold text-white bg-gradient-to-r from-blue-700 to-indigo-600 px-4 py-2 rounded-xl shadow-lg border border-blue-900/40">
           {hoursWithData.length} horas disponibles
         </span>

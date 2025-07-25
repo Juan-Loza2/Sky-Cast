@@ -36,9 +36,9 @@ const TabNavigation = ({ activeTab, onTabChange, estadisticas }) => {
   ]
 
   return (
-    <div className="rounded-2xl shadow-2xl p-4 flex justify-center text-white mb-6"
-         style={{ background: '#243b6b', backdropFilter: 'blur(6px)', boxShadow: '0 8px 32px 0 rgba(0,0,0,0.35)' }}>
-      <div className="flex flex-wrap gap-3 justify-center relative">
+    <div className="rounded-2xl shadow-2xl p-4 flex justify-center text-[var(--color-text)] mb-6"
+         style={{ background: '[var(--color-bg)]', backdropFilter: 'blur(6px)', boxShadow: '0 8px 12px 0 rgba(0,0,0,0.35)' }}>
+      <div className="flex flex-wrap gap-3 justify-center relative text-[var(--color-text)]">
         {tabs.map((tab, idx) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -47,10 +47,10 @@ const TabNavigation = ({ activeTab, onTabChange, estadisticas }) => {
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={`relative px-6 py-4 rounded-full font-semibold text-lg md:text-xl flex items-center gap-2 transition-all duration-200 min-w-[140px]
-                ${isActive ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg" : "bg-gray-100 text-gray-700 hover:bg-blue-50"}
+                ${isActive ? "button-primary text-[var(--color-text)] shadow-lg" : "button text-[var(--color-text)] hover:bg-blue-50"}
               `}
             >
-              <Icon className={`h-5 w-5 ${isActive ? "text-white" : "text-blue-600"}`} />
+              <Icon className={`h-5 w-5 ${isActive ? "text-[var(--color-text)]" : "text-blue-600"}`} />
               <span>{tab.label}</span>
               {isActive && (
                 <motion.div

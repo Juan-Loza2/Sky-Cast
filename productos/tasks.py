@@ -54,6 +54,8 @@ def sync_wrf_data():
         
         # Variables principales para empezar
         variables = ['t2', 'ppn', 'wspd10', 'rh2', 'ppnaccum']
+        variables_permitidas = ["t2", "ppnaccum", "rh2", "max_dbz", "wdir10", "wspd10"]
+        variables = [v for v in variables if v in variables_permitidas]
         
         # Obtener datos de la última semana
         hoy = date.today()

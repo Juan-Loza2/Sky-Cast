@@ -3,11 +3,13 @@ import { MoreVertical } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
+import { Sun, Moon } from "lucide-react"
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -19,8 +21,13 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   return (
-    <header className="bg-[#0a174e] border-b border-[#0a174e] shadow-sm fixed top-0 left-0 w-full z-50">
+    <header className="border-b shadow-sm fixed top-0 left-0 w-full z-50" style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)' }}>
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -33,55 +40,62 @@ const Header = () => {
             </button>
             <div>
               <div className="flex items-center space-x-2">
-                <h1 className="text-2xl font-bold text-white">OHMC</h1>
-                <span className="text-base text-blue-200 font-semibold">Sky Cast</span>
+                <h1 className="text-2xl font-bold text-[var(--color-text)]">OHMC</h1>
+                <span className="text-base font-semibold" style={{ color: 'var(--color-primary)' }}>Sky Cast</span>
               </div>
-              <p className="text-blue-100 text-sm">Observatorio Hidrometeorológico</p>
+              <p className="text-sm text-[var(--color-text)]">Observatorio Hidrometeorológico</p>
             </div>
           </div>
-          <div className="relative" ref={menuRef}>
+          <div className="flex items-center gap-2">
             <button
               className="p-2 rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              onClick={() => setOpen((v) => !v)}
-              aria-label="Abrir menú"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              aria-label="Cambiar tema"
+              title={theme === "dark" ? "Modo claro" : "Modo oscuro"}
             >
-              <MoreVertical className="h-7 w-7 text-white" />
+              {theme === "dark" ? <Sun className="h-6 w-6 text-yellow-300" /> : <Moon className="h-6 w-6 text-blue-700" />}
             </button>
-            <AnimatePresence>
-              {open && (
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.25, ease: 'easeOut' }}
-                  className="absolute right-0 mt-2 w-56 rounded-xl shadow-2xl py-2 z-50"
-                  style={{
-                    background: 'linear-gradient(120deg, #162a5e 60%, #243b6b 100%)',
-                    border: '1.5px solid #223366',
-                    backdropFilter: 'blur(6px)',
-                  }}
-                >
-                  <button
-                    className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
-                    onClick={() => { navigate('/datos-meteorologicos'); setOpen(false); }}
+            {/* Menú hamburguesa */}
+            <div className="relative" ref={menuRef}>
+              <button
+                className="p-2 rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onClick={() => setOpen((v) => !v)}
+                aria-label="Abrir menú"
+              >
+                <MoreVertical className="h-7 w-7 text-white" />
+              </button>
+              <AnimatePresence>
+                {open && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                    className="absolute right-0 mt-2 w-56 rounded-xl shadow-2xl py-2 z-50"
+                    style={{ background: 'var(--color-card)', border: '1.5px solid var(--color-border)', backdropFilter: 'blur(6px)' }}
                   >
-                    Datos Meteorológicos
-                  </button>
-                  <button
-                    className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
-                    onClick={() => { navigate('/'); setOpen(false); }}
-                  >
-                    Productos Meteorológicos
-                  </button>
-                  <button
-                    className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
-                    onClick={() => { navigate('/quienes-somos'); setOpen(false); }}
-                  >
-                    Quienes Somos
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    <button
+                      className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
+                      onClick={() => { navigate('/datos-meteorologicos'); setOpen(false); }}
+                    >
+                      Datos Meteorológicos
+                    </button>
+                    <button
+                      className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
+                      onClick={() => { navigate('/'); setOpen(false); }}
+                    >
+                      Productos Meteorológicos
+                    </button>
+                    <button
+                      className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
+                      onClick={() => { navigate('/quienes-somos'); setOpen(false); }}
+                    >
+                      Quienes Somos
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

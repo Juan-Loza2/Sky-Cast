@@ -72,8 +72,8 @@ const GasesSection = ({ loading: initialLoading }) => {
           <Activity className="h-7 w-7 text-white" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-white mb-1">Medición de Gases de Efecto Invernadero</h2>
-          <p className="text-blue-100">
+          <h2 className="text-2xl font-bold text-[var(--color-text)] mb-1">Medición de Gases de Efecto Invernadero</h2>
+          <p className="text-[var(--color-text)]-100">
             Visualizaciones diarias de gases de efecto invernadero medidos por el analizador Picarro en el OHMC. Datos actualizados diariamente a las 10:30 h.
           </p>
         </div>
@@ -83,14 +83,14 @@ const GasesSection = ({ loading: initialLoading }) => {
       <div>
         <div className="flex items-center space-x-3 mb-4">
           <Calendar className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-white">Seleccionar fecha</h3>
+          <h3 className="text-lg font-semibold text-[var(--color-text)]">Seleccionar fecha</h3>
         </div>
         <div className="max-w-xs">
-          <label className="block text-sm font-medium text-white mb-2">Fecha</label>
+          <label className="block text-sm font-medium text-[var(--color-text)] mb-2">Fecha</label>
           <div className="relative">
             <button
               type="button"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white pr-10 flex items-center gap-2 text-gray-900 text-left"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-[var(--color-bg)] pr-10 flex items-center gap-2 text-[var(--color-text)] text-left"
               onClick={() => setShowDateDropdown((v) => !v)}
             >
               <Calendar className="h-5 w-5 text-blue-600 mr-2" />
@@ -122,7 +122,7 @@ const GasesSection = ({ loading: initialLoading }) => {
               key={gasType.id}
               className="rounded-2xl shadow-2xl p-6"
               style={{
-                background: 'linear-gradient(120deg, rgba(36,59,107,0.95) 60%, rgba(44,62,80,0.85) 100%)',
+                background: '[var(--color-bg)]',
                 backdropFilter: 'blur(8px)',
                 border: '1.5px solid #2b3a5e',
               }}
@@ -135,11 +135,11 @@ const GasesSection = ({ loading: initialLoading }) => {
                   <Activity className={`h-6 w-6 ${gasType.color}`} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white">{gasType.name}</h3>
-                  <p className="text-sm text-blue-200">{gasType.symbol}</p>
+                  <h3 className="text-lg font-semibold text-[var(--color-text)]">{gasType.name}</h3>
+                  <p className="text-sm text-[var(--color-text)]-200">{gasType.symbol}</p>
                 </div>
               </div>
-              <p className="text-sm text-blue-100 mb-4">{gasType.description}</p>
+              <p className="text-sm text-[var(--color-text)] mb-4">{gasType.description}</p>
               {loading ? (
                 <div className="flex items-center justify-center h-64 bg-gray-900/30 rounded-lg">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -151,7 +151,7 @@ const GasesSection = ({ loading: initialLoading }) => {
                     alt={`${gasType.name} - ${format(selectedDate, "dd/MM/yyyy")}`}
                     className="w-full"
                   />
-                  <div className="mt-3 text-sm text-blue-100 bg-blue-900/30 p-2 rounded">
+                  <div className="mt-3 text-sm text-[var(--color-text)] bg-[var(--color-bg)] p-2 rounded">
                     Última actualización: {producto.ultima_fecha || "No disponible"}
                   </div>
                 </div>
@@ -172,15 +172,15 @@ const GasesSection = ({ loading: initialLoading }) => {
       <motion.div
         className="rounded-2xl p-6 border border-blue-400 shadow-xl"
         style={{
-          background: 'linear-gradient(120deg, rgba(36,59,107,0.15) 60%, rgba(44,62,80,0.10) 100%)',
+          background: '[var(--color-bg)]',
           backdropFilter: 'blur(2px)',
         }}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
       >
-        <h3 className="text-lg font-semibold text-blue-200 mb-3">ℹ️ Información sobre las mediciones</h3>
-        <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-100">
+        <h3 className="text-lg font-semibold text-[var(--color-text)] mb-3">ℹ️ Información sobre las mediciones</h3>
+        <div className="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text)]">
           <div>
             <h4 className="font-semibold mb-2">Dióxido de Carbono (CO₂)</h4>
             <p>

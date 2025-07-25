@@ -80,9 +80,8 @@ class Command(BaseCommand):
                 )
 
         # 4. WRF (todas las variables, cada 3 horas, para el último mes)
-        wrf_variables = [
-            "t2", "ppnaccum", "rh2", "max_dbz", "wdir10", "wspd10"
-        ]
+        wrf_variables_permitidas = ["t2", "ppnaccum", "rh2", "max_dbz", "wdir10", "wspd10"]
+        wrf_variables = [v for v in wrf_variables_permitidas if v in wrf_variables_permitidas]
         tipo_wrf, _ = TipoProducto.objects.get_or_create(nombre="wrf_cba")
         # Para cada día, dos corridas: 18 UTC (para la mañana siguiente) y 06 UTC (para la tarde)
         for delta in range(dias):
