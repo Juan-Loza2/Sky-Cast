@@ -14,7 +14,6 @@ class TipoProducto(models.Model):
         return self.nombre
 
 class Producto(models.Model):
-    foto = models.ImageField(upload_to='productos/', null=True, blank=True)
     url_imagen = models.URLField(max_length=500)
     tipo_producto = models.ForeignKey(TipoProducto, on_delete=models.CASCADE)
     variable = models.CharField(max_length=50, null=True, blank=True)  # Para WRF

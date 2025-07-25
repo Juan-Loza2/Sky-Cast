@@ -22,24 +22,24 @@ api.interceptors.response.use(
   },
 )
 
-export const fetchProductos = async (params = {}) => {
+export const fetchItems = async (params = {}) => {
   try {
-    console.log("Fetching productos with params:", params)
-    const response = await api.get("/productos/", { params })
+    console.log("Fetching items with params:", params)
+    const response = await api.get("/items/", { params })
     console.log("API Response:", response.data)
     return response.data
   } catch (error) {
-    console.error("Error fetching productos:", error)
+    console.error("Error fetching items:", error)
     throw error
   }
 }
 
-export const fetchProductoDetail = async (id) => {
+export const fetchItemDetail = async (id) => {
   try {
-    const response = await api.get(`/productos/${id}/`)
+    const response = await api.get(`/items/${id}/`)
     return response.data
   } catch (error) {
-    console.error("Error fetching producto detail:", error)
+    console.error("Error fetching item detail:", error)
     throw error
   }
 }
@@ -74,15 +74,26 @@ export const fetchEstadisticas = async () => {
   }
 }
 
-export const fetchProductosPorFechaHora = async (fecha, hora, variable = null) => {
+export const fetchItemsPorFechaHora = async (fecha, hora, variable = null) => {
   try {
     const params = { fecha, hora }
     if (variable) params.variable = variable
 
-    const response = await api.get("/productos/fecha-hora/", { params })
+    const response = await api.get("/items/fecha-hora/", { params })
     return response.data
   } catch (error) {
-    console.error("Error fetching productos por fecha/hora:", error)
+    console.error("Error fetching items por fecha/hora:", error)
+    throw error
+  }
+}
+
+export const fetchImagenDinamica = async ({ proyecto, fecha, hora, variable, offset }) => {
+  try {
+    const params = { proyecto, fecha, hora, variable, offset }
+    const response = await api.get("/imagen-dinamica/", { params })
+    return response.data.url
+  } catch (error) {
+    console.error("Error fetching imagen dinamica:", error)
     throw error
   }
 }

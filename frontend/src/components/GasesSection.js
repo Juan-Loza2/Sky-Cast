@@ -5,7 +5,7 @@ import { Calendar, Activity, TrendingUp } from "lucide-react"
 import DatePicker from "react-datepicker"
 import { format, subDays } from "date-fns"
 import { es } from "date-fns/locale"
-import { fetchProductos } from "../services/api"
+import { fetchItems } from '../services/api'
 import ZoomableImage from "./ZoomableImage"
 import "react-datepicker/dist/react-datepicker.css"
 import { motion } from "framer-motion"
@@ -47,7 +47,7 @@ const GasesSection = ({ loading: initialLoading }) => {
     try {
       setLoading(true)
       const dateStr = format(selectedDate, "yyyy-MM-dd")
-      const response = await fetchProductos({
+      const response = await fetchItems({
         tipo: "MedicionAire",
         fecha: dateStr,
       })

@@ -17,7 +17,7 @@ import {
 import DatePicker from "react-datepicker"
 import { format, subDays, addDays } from "date-fns"
 import { es } from "date-fns/locale"
-import { fetchProductos } from "../services/api"
+import { fetchItems } from "../services/api"
 import ZoomableImage from "./ZoomableImage"
 import HourSelector from "./HourSelector"
 import "react-datepicker/dist/react-datepicker.css"
@@ -216,17 +216,17 @@ const WRFSection = ({ loading: initialLoading }) => {
 
       // Cargar productos de 3 días para asegurar que tenemos todas las horas
       const [currentResponse, prevResponse, nextResponse] = await Promise.all([
-        fetchProductos({
+        fetchItems({
           tipo: "wrf_cba",
           fecha: dateStr,
           variable: selectedVariable,
         }),
-        fetchProductos({
+        fetchItems({
           tipo: "wrf_cba",
           fecha: prevDateStr,
           variable: selectedVariable,
         }).catch(() => ({ results: [] })),
-        fetchProductos({
+        fetchItems({
           tipo: "wrf_cba",
           fecha: nextDateStr,
           variable: selectedVariable,
@@ -308,42 +308,54 @@ const WRFSection = ({ loading: initialLoading }) => {
           const [, date, runHour, offset] = match
           const baseDate = new Date(date + "T00:00:00")
           const dateTimeInfo = offsetToArgDateTime(offset, runHour, baseDate)
-
-          console.log(`Archivo: ${p.nombre_archivo} -> Hora ARG: ${dateTimeInfo.time}, Fecha: ${dateTimeInfo.dateStr}`)
-
           // Solo incluir si la fecha del pronóstico coincide con la fecha seleccionada
           if (selectedDateStr === dateTimeInfo.dateStr) {
-            return {
-              argTime: dateTimeInfo.time,
-              offset: Number.parseInt(offset),
-              runHour: Number.parseInt(runHour),
-              filename: p.nombre_archivo,
-              forecastDate: dateTimeInfo.date,
-              producto: p,
+            // Solo incluir si hay imagen disponible
+            const imageUrl = p.imagen_url || p.url_imagen
+            if (imageUrl && imageUrl !== "" && imageUrl !== null && imageUrl !== undefined) {
+              return {
+                argTime: dateTimeInfo.time,
+                offset: Number.parseInt(offset),
+                runHour: Number.parseInt(runHour),
+                filename: p.nombre_archivo,
+                forecastDate: dateTimeInfo.date,
+                producto: p,
+                imageUrl,
+              }
             }
           }
         }
         return null
       })
       .filter(Boolean)
+    // Filtrar solo horas entre 00:00 y 24:00 inclusive
+    .filter((h) => {
+      const hour = Number.parseInt(h.argTime.split(":")[0])
+      return hour >= 0 && hour <= 24
+    })
 
-    // Obtener horas únicas y ordenarlas
-    const uniqueHours = [...new Set(hoursInfo.map((h) => h.argTime))].sort((a, b) => {
+  // Filtrar horas únicas por argTime
+  const uniqueHoursMap = new Map()
+  hoursInfo.forEach((h) => {
+    if (!uniqueHoursMap.has(h.argTime)) {
+      uniqueHoursMap.set(h.argTime, h)
+    }
+  })
+  const uniqueHours = Array.from(uniqueHoursMap.values())
+    .map((h) => h.argTime)
+    .sort((a, b) => {
       const hourA = Number.parseInt(a.split(":")[0])
       const hourB = Number.parseInt(b.split(":")[0])
       return hourA - hourB
     })
 
-    setAvailableHours(uniqueHours)
+  setAvailableHours(uniqueHours)
 
-    console.log("Horas disponibles (ARG) para fecha seleccionada:", uniqueHours)
-    console.log("Información de archivos filtrada:", hoursInfo.length)
-
-    // Si la hora seleccionada no está disponible, seleccionar la primera disponible
-    if (uniqueHours.length > 0 && !uniqueHours.includes(selectedTime)) {
-      setSelectedTime(uniqueHours[0])
-    }
+  // Si la hora seleccionada no está disponible, seleccionar la primera disponible
+  if (uniqueHours.length > 0 && !uniqueHours.includes(selectedTime)) {
+    setSelectedTime(uniqueHours[0])
   }
+}
 
   const findImageForSelectedTime = () => {
     if (allProductos.length === 0) {
@@ -352,29 +364,22 @@ const WRFSection = ({ loading: initialLoading }) => {
     }
 
     const selectedDateStr = format(selectedDate, "yyyy-MM-dd")
-    console.log("Buscando imagen para hora ARG:", selectedTime, "fecha:", selectedDateStr)
-
-    // Buscar el producto que corresponde a la hora ARG seleccionada en la fecha correcta
+    // Buscar el producto que corresponde a la hora ARG seleccionada en la fecha correcta y que tenga imagen
     const matchingProduct = allProductos.find((p) => {
-      // Extraer información del nombre del archivo
       const match = p.nombre_archivo.match(/(\d{4}-\d{2}-\d{2})_(\d{2})\+(\d{2})/)
       if (match) {
         const [, date, runHour, offset] = match
         const baseDate = new Date(date + "T00:00:00")
         const dateTimeInfo = offsetToArgDateTime(offset, runHour, baseDate)
-
-        return dateTimeInfo.time === selectedTime && selectedDateStr === dateTimeInfo.dateStr
+        const imageUrl = p.imagen_url || p.url_imagen
+        return dateTimeInfo.time === selectedTime && selectedDateStr === dateTimeInfo.dateStr && imageUrl && imageUrl !== "" && imageUrl !== null && imageUrl !== undefined
       }
       return false
     })
 
-    console.log("Producto encontrado:", matchingProduct?.nombre_archivo)
-
     if (matchingProduct) {
-      // Usar imagen_url (imagen guardada) o url_imagen (externa) como fallback
       const imageUrl = matchingProduct.imagen_url || matchingProduct.url_imagen
       setCurrentImage(imageUrl)
-      console.log("URL de imagen:", imageUrl)
     } else {
       setCurrentImage(null)
     }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Wind, AlertTriangle } from "lucide-react"
-import { fetchProductos } from "../services/api"
+import { fetchItems } from '../services/api'
 import { motion } from "framer-motion"
 
 const VientosSection = ({ loading: initialLoading }) => {
@@ -16,7 +16,7 @@ const VientosSection = ({ loading: initialLoading }) => {
   const loadVientosData = async () => {
     try {
       setLoading(true)
-      const response = await fetchProductos({ tipo: "rutas_caminera" })
+      const response = await fetchItems({ tipo: "rutas_caminera" })
       const productos = response.results || response
       setProducto(productos[0] || null)
     } catch (error) {

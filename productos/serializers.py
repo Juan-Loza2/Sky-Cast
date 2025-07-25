@@ -33,13 +33,7 @@ class ProductoSerializer(serializers.ModelSerializer):
         return None
     
     def get_imagen_url(self, obj):
-        """Devolver URL de imagen guardada o URL externa como fallback"""
-        if obj.foto:
-            request = self.context.get('request')
-            if request:
-                return request.build_absolute_uri(obj.foto.url)
-            return obj.foto.url
-        return obj.url_imagen  # Fallback a URL externa
+        return obj.url_imagen
 
 class ProductoListSerializer(serializers.ModelSerializer):
     tipo_producto_nombre = serializers.CharField(source='tipo_producto.nombre', read_only=True)
@@ -58,10 +52,4 @@ class ProductoListSerializer(serializers.ModelSerializer):
         return None
     
     def get_imagen_url(self, obj):
-        """Devolver URL de imagen guardada o URL externa como fallback"""
-        if obj.foto:
-            request = self.context.get('request')
-            if request:
-                return request.build_absolute_uri(obj.foto.url)
-            return obj.foto.url
-        return obj.url_imagen  # Fallback a URL externa
+        return obj.url_imagen

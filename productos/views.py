@@ -12,6 +12,9 @@ from .serializers import (
     FechaProductoSerializer
 )
 import logging
+from django.http import JsonResponse
+import json
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -223,3 +226,46 @@ def estadisticas(request):
     
     logger.info(f"estadisticas - {stats}")
     return Response(stats)
+
+@api_view(['GET'])
+def imagen_dinamica(request):
+    """Construye y devuelve la URL de una imagen dinámica según parámetros y el JSON de configuración."""
+    proyecto = request.query_params.get('proyecto')
+    fecha = request.query_params.get('fecha')  # formato YYYY-MM-DD
+    hora = request.query_params.get('hora')    # formato HH (opcional)
+    variable = request.query_params.get('variable')
+    offset = request.query_params.get('offset')  # +24, +48, etc.
+
+    # Cargar el JSON de configuración (puedes ajustar la ruta si lo guardas en otro lado)
+    config_path = os.path.join(os.path.dirname(__file__), '../ohmc_data_structure.json')
+    with open(config_path, 'r') as f:
+        config = json.load(f)
+
+    if not proyecto or proyecto not in config['proyectos']:
+        return JsonResponse({'error': 'Proyecto inválido'}, status=400)
+    if not fecha or not variable or not offset:
+        return JsonResponse({'error': 'Faltan parámetros requeridos'}, status=400)
+
+    # Parsear fecha
+    try:
+        year, month, day = fecha.split('-')
+    except Exception:
+        return JsonResponse({'error': 'Formato de fecha inválido'}, status=400)
+
+    # Obtener info del proyecto
+    pj = config['proyectos'][proyecto]
+    url_base = pj['url_base'].rstrip('/')
+    estructura_dir = pj.get('estructura_directorios', '')
+    estructura_arch = pj.get('estructura_archivos', '')
+
+    # Determinar DD_HH
+    if hora:
+        dd_hh = f"{day}_{hora}"
+    else:
+        dd_hh = day  # fallback
+
+    # Construir path
+    dir_path = estructura_dir.replace('YYYY', year).replace('MM', month).replace('DD_HH', dd_hh).replace('{variable}', variable)
+    file_name = estructura_arch.replace('{variable}', variable).replace('YYYY', year).replace('MM', month).replace('DD', day).replace('HH', hora if hora else '').replace('+HH', offset)
+    url = f"{url_base}/{dir_path}{file_name}"
+    return JsonResponse({'url': url})

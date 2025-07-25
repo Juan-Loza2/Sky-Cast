@@ -97,7 +97,7 @@ class ProductoAdmin(admin.ModelAdmin):
             'fields': ('tipo_producto', 'nombre_archivo', 'variable')
         }),
         ('🖼️ Imagen', {
-            'fields': ('url_imagen', 'foto', 'imagen_preview')
+            'fields': ('url_imagen', 'imagen_preview')
         }),
         ('📊 Estadísticas', {
             'fields': ('ultima_fecha', 'total_fechas'),

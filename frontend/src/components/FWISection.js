@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { Flame, AlertTriangle, Info } from "lucide-react"
-import { fetchProductos } from "../services/api"
+import { fetchItems } from '../services/api'
 import { motion } from "framer-motion"
+import ZoomableImage from "./ZoomableImage"
 
 const FWISection = ({ loading: initialLoading }) => {
   const [producto, setProducto] = useState(null)
@@ -16,7 +17,7 @@ const FWISection = ({ loading: initialLoading }) => {
   const loadFWIData = async () => {
     try {
       setLoading(true)
-      const response = await fetchProductos({ tipo: "FWI" })
+      const response = await fetchItems({ tipo: "FWI" })
       const productos = response.results || response
       setProducto(productos[0] || null)
     } catch (error) {
@@ -45,7 +46,7 @@ const FWISection = ({ loading: initialLoading }) => {
           <h2 className="text-2xl font-bold text-white mb-1">Índice de Peligro de Incendio (FWI)</h2>
           <p className="text-blue-100">
             El Fire Weather Index (FWI) es un sistema de clasificación numérica del peligro de incendio forestal basado en
-            las condiciones meteorológicas. Actualizado diariamente a las 11:00 UTC.
+            las condiciones meteorológicas. 
           </p>
         </div>
       </div>
@@ -108,19 +109,11 @@ const FWISection = ({ loading: initialLoading }) => {
           </div>
         ) : producto ? (
           <div className="text-center">
-            <img
+            <ZoomableImage
               src={producto.url_imagen || "/placeholder.svg"}
               alt="Índice de Peligro de Incendio"
               className="max-w-full h-auto rounded-lg shadow-md mx-auto"
-              onError={(e) => {
-                e.target.style.display = "none"
-                e.target.nextSibling.style.display = "block"
-              }}
             />
-            <div className="hidden bg-gray-100 p-8 rounded-lg">
-              <AlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-500">Imagen no disponible temporalmente</p>
-            </div>
             <div className="mt-4 text-sm text-blue-100">
               Última actualización: {producto.ultima_fecha || "No disponible"}
             </div>
