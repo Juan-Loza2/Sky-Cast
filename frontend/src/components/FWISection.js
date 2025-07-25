@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Flame, AlertTriangle, Info } from "lucide-react"
 import { fetchProductos } from "../services/api"
+import { motion } from "framer-motion"
 
 const FWISection = ({ loading: initialLoading }) => {
   const [producto, setProducto] = useState(null)
@@ -36,35 +37,69 @@ const FWISection = ({ loading: initialLoading }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">🔥 Índice de Peligro de Incendio (FWI)</h2>
-        <p className="text-gray-600">
-          El Fire Weather Index (FWI) es un sistema de clasificación numérica del peligro de incendio forestal basado en
-          las condiciones meteorológicas. Actualizado diariamente a las 11:00 UTC.
-        </p>
-      </div>
-
-      {/* Risk Scale */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">📊 Escala de Riesgo</h3>
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-          {riskLevels.map((risk, index) => (
-            <div key={index} className="text-center">
-              <div className={`${risk.color} text-white p-3 rounded-lg mb-2`}>
-                <div className="font-bold">{risk.level}</div>
-                <div className="text-sm">{risk.range}</div>
-              </div>
-              <p className="text-xs text-gray-600">{risk.description}</p>
-            </div>
-          ))}
+      <div className="mb-2 flex items-center gap-3">
+        <div className="bg-gradient-to-r from-orange-500 to-orange-700 p-2 rounded-lg">
+          <Flame className="h-7 w-7 text-white" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold text-white mb-1">Índice de Peligro de Incendio (FWI)</h2>
+          <p className="text-blue-100">
+            El Fire Weather Index (FWI) es un sistema de clasificación numérica del peligro de incendio forestal basado en
+            las condiciones meteorológicas. Actualizado diariamente a las 11:00 UTC.
+          </p>
         </div>
       </div>
 
+      {/* Risk Scale */}
+      <motion.div
+        className="rounded-2xl shadow-2xl p-6"
+        style={{
+          background: 'linear-gradient(120deg, rgba(36,59,107,0.95) 60%, rgba(44,62,80,0.85) 100%)',
+          backdropFilter: 'blur(8px)',
+          border: '1.5px solid #2b3a5e',
+        }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
+      >
+        <h3 className="text-lg font-semibold text-white mb-4">📊 Escala de Riesgo</h3>
+        <div className="flex flex-col gap-5 md:grid md:grid-cols-5 md:gap-4">
+          {riskLevels.map((risk, index) => (
+            <motion.div
+              key={index}
+              className="flex flex-col items-center"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 + index * 0.12, duration: 0.6, type: 'spring', stiffness: 120 }}
+            >
+              <div
+                className={`w-full ${risk.color} text-white py-5 px-2 rounded-2xl shadow-xl flex flex-col items-center justify-center mb-2 transition-transform hover:scale-105`}
+                style={{ minWidth: 120 }}
+              >
+                <span className="font-extrabold text-xl md:text-2xl tracking-tight drop-shadow">{risk.level}</span>
+                <span className="text-base md:text-lg font-semibold opacity-90">{risk.range}</span>
+              </div>
+              <p className="text-sm text-blue-100 font-medium mt-1 md:mt-2 text-center max-w-[180px]">{risk.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
       {/* FWI Image */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <motion.div
+        className="rounded-2xl shadow-2xl p-6"
+        style={{
+          background: 'linear-gradient(120deg, rgba(36,59,107,0.95) 60%, rgba(44,62,80,0.85) 100%)',
+          backdropFilter: 'blur(8px)',
+          border: '1.5px solid #2b3a5e',
+        }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: 'easeOut', delay: 0.2 }}
+      >
         <div className="flex items-center space-x-3 mb-4">
-          <Flame className="h-6 w-6 text-red-500" />
-          <h3 className="text-lg font-semibold text-gray-800">Mapa Actual de Peligro de Incendio</h3>
+          <Flame className="h-6 w-6 text-orange-400" />
+          <h3 className="text-lg font-semibold text-white">Mapa Actual de Peligro de Incendio</h3>
         </div>
 
         {loading ? (
@@ -86,7 +121,7 @@ const FWISection = ({ loading: initialLoading }) => {
               <AlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-2" />
               <p className="text-gray-500">Imagen no disponible temporalmente</p>
             </div>
-            <div className="mt-4 text-sm text-gray-500">
+            <div className="mt-4 text-sm text-blue-100">
               Última actualización: {producto.ultima_fecha || "No disponible"}
             </div>
           </div>
@@ -98,14 +133,23 @@ const FWISection = ({ loading: initialLoading }) => {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* Information Panel */}
-      <div className="bg-orange-50 rounded-xl p-6 border border-orange-200">
+      <motion.div
+        className="rounded-2xl p-6 border border-orange-400 shadow-xl"
+        style={{
+          background: 'linear-gradient(120deg, rgba(255,140,0,0.10) 60%, rgba(255,255,255,0.05) 100%)',
+          backdropFilter: 'blur(2px)',
+        }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
+      >
         <div className="flex items-start space-x-3">
           <Info className="h-6 w-6 text-orange-600 mt-1" />
           <div>
-            <h3 className="text-lg font-semibold text-orange-800 mb-3">Información sobre el FWI</h3>
+            <h3 className="text-lg font-semibold text-orange-700 mb-3">Información sobre el FWI</h3>
             <div className="space-y-2 text-sm text-orange-700">
               <p>
                 <strong>Componentes del FWI:</strong>
@@ -134,7 +178,7 @@ const FWISection = ({ loading: initialLoading }) => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

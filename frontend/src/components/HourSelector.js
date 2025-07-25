@@ -52,7 +52,7 @@ const HourSelector = ({ selectedHour, onHourChange, availableHours = [] }) => {
       <div className="flex items-center space-x-3 mb-4">
         <Clock className="h-5 w-5 text-blue-600" />
         <h3 className="text-lg font-semibold text-white">Hora de Pronóstico (ARG)</h3>
-        <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+        <span className="text-sm font-semibold text-white bg-gradient-to-r from-blue-700 to-indigo-600 px-4 py-2 rounded-xl shadow-lg border border-blue-900/40">
           {hoursWithData.length} horas disponibles
         </span>
       </div>
@@ -107,7 +107,7 @@ const HourSelector = ({ selectedHour, onHourChange, availableHours = [] }) => {
 
       {/* Información adicional */}
       <div className="mt-4 text-center">
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-blue-500">
           💡 Usa los botones &lt;&lt; &gt;&gt; para navegar rápidamente entre horas
         </div>
         {hoursWithData.length > 0 && (

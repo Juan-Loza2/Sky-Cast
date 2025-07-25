@@ -33,6 +33,8 @@ const WRFSection = ({ loading: initialLoading }) => {
   const [loading, setLoading] = useState(initialLoading)
   const [currentImage, setCurrentImage] = useState(null)
   const [debugInfo, setDebugInfo] = useState("")
+  const [showVariableDropdown, setShowVariableDropdown] = useState(false);
+  const [showDateDropdown, setShowDateDropdown] = useState(false);
 
   // TODAS las variables WRF disponibles según el JSON
   const variables = [
@@ -406,24 +408,35 @@ const WRFSection = ({ loading: initialLoading }) => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-white mb-2">Seleccionar fecha</label>
-            <DatePicker
-              selected={selectedDate}
-              onChange={setSelectedDate}
-              dateFormat="dd/MM/yyyy"
-              locale={es}
-              maxDate={new Date()} // Solo hasta hoy
-              minDate={new Date(2020, 0, 1)} // Desde 2020 - sin restricciones estrictas
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              showYearDropdown
-              showMonthDropdown
-              dropdownMode="select"
-            />
-            <p className="text-sm text-white mt-1">Selecciona cualquier fecha disponible</p>
+            <div className="relative">
+              <button
+                type="button"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white pr-10 flex items-center gap-2 text-gray-900 text-left"
+                onClick={() => setShowDateDropdown((v) => !v)}
+              >
+                <Calendar className="h-5 w-5 text-blue-600 mr-2" />
+                <span>{format(selectedDate, "dd/MM/yyyy", { locale: es })}</span>
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+              </button>
+              {showDateDropdown && (
+                <div className="absolute z-50 mt-2 w-full rounded-lg p-0 shadow-xl">
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={(date) => { setSelectedDate(date); setShowDateDropdown(false); }}
+                    dateFormat="dd/MM/yyyy"
+                    locale={es}
+                    maxDate={new Date()}
+                    minDate={new Date(2020, 0, 1)}
+                    inline
+                    showYearDropdown
+                    showMonthDropdown
+                    dropdownMode="select"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
-            <span className="font-semibold text-blue-800">{format(selectedDate, "dd/MM/yyyy", { locale: es })}</span>
-          </div>
         </div>
 
         {/* Espacio entre selector de fecha y variable */}
@@ -478,79 +491,46 @@ const WRFSection = ({ loading: initialLoading }) => {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Seleccionar variable</label>
+              <label className="block text-sm font-medium text-white mb-2">Seleccionar variable</label>
               <div className="relative">
-                <select
-                  value={selectedVariable}
-                  onChange={(e) => setSelectedVariable(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white pr-10"
+                <button
+                  type="button"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white pr-10 flex items-center gap-2 text-gray-900 text-left"
+                  onClick={() => setShowVariableDropdown((v) => !v)}
                 >
-                  {/* Agrupar por categoría */}
-                  <optgroup label="🌡️ Temperatura">
-                    {variables
-                      .filter((v) => v.category === "Temperatura")
-                      .map((variable) => (
-                        <option key={variable.id} value={variable.id}>
-                          {variable.name}
-                        </option>
-                      ))}
-                  </optgroup>
-                  <optgroup label="🌧️ Precipitación">
-                    {variables
-                      .filter((v) => v.category === "Precipitación")
-                      .map((variable) => (
-                        <option key={variable.id} value={variable.id}>
-                          {variable.name}
-                        </option>
-                      ))}
-                  </optgroup>
-                  <optgroup label="💨 Viento">
-                    {variables
-                      .filter((v) => v.category === "Viento")
-                      .map((variable) => (
-                        <option key={variable.id} value={variable.id}>
-                          {variable.name}
-                        </option>
-                      ))}
-                  </optgroup>
-                  <optgroup label="☁️ Nubes">
-                    {variables
-                      .filter((v) => v.category === "Nubes")
-                      .map((variable) => (
-                        <option key={variable.id} value={variable.id}>
-                          {variable.name}
-                        </option>
-                      ))}
-                  </optgroup>
-                  <optgroup label="📡 Radar">
-                    {variables
-                      .filter((v) => v.category === "Radar")
-                      .map((variable) => (
-                        <option key={variable.id} value={variable.id}>
-                          {variable.name}
-                        </option>
-                      ))}
-                  </optgroup>
-                  <optgroup label="💧 Humedad">
-                    {variables
-                      .filter((v) => v.category === "Humedad")
-                      .map((variable) => (
-                        <option key={variable.id} value={variable.id}>
-                          {variable.name}
-                        </option>
-                      ))}
-                  </optgroup>
-                  <optgroup label="⚡ Convección">
-                    {variables
-                      .filter((v) => v.category === "Convección")
-                      .map((variable) => (
-                        <option key={variable.id} value={variable.id}>
-                          {variable.name}
-                        </option>
-                      ))}
-                  </optgroup>
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+                  {selectedVariableData && (
+                    <selectedVariableData.icon className="h-5 w-5 text-blue-600 mr-2" />
+                  )}
+                  <span>{selectedVariableData?.name || "Seleccionar variable"}</span>
+                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+                </button>
+                {showVariableDropdown && (
+                  <div className="absolute z-50 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 max-h-72 overflow-y-auto">
+                    {[
+                      { label: "🌡️ Temperatura", options: variables.filter((v) => v.category === "Temperatura") },
+                      { label: "🌧️ Precipitación", options: variables.filter((v) => v.category === "Precipitación") },
+                      { label: "💨 Viento", options: variables.filter((v) => v.category === "Viento") },
+                      { label: "☁️ Nubes", options: variables.filter((v) => v.category === "Nubes") },
+                      { label: "📡 Radar", options: variables.filter((v) => v.category === "Radar") },
+                      { label: "💧 Humedad", options: variables.filter((v) => v.category === "Humedad") },
+                      { label: "⚡ Convección", options: variables.filter((v) => v.category === "Convección") },
+                    ].map((group) => (
+                      <div key={group.label}>
+                        <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50">{group.label}</div>
+                        {group.options.map((variable) => (
+                          <button
+                            key={variable.id}
+                            onClick={() => { setSelectedVariable(variable.id); setShowVariableDropdown(false); }}
+                            className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-blue-50 transition ${selectedVariable === variable.id ? 'bg-blue-100 text-blue-700 font-bold' : 'text-gray-700'}`}
+                          >
+                            <variable.icon className="h-4 w-4 mr-2" />
+                            {variable.name}
+                          </button>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

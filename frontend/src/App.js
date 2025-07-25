@@ -10,6 +10,7 @@ import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { motion } from "framer-motion";
+import QuienesSomos from "./pages/QuienesSomos"
 
 function WidgetCarousel() {
   const widgets = [
@@ -222,6 +223,7 @@ function App() {
     <Routes>
       <Route path="/" element={<DashboardWithHeader />} />
       <Route path="/landing" element={<Landing />} />
+      <Route path="/quienes-somos" element={<QuienesSomos />} />
     </Routes>
   );
 }
