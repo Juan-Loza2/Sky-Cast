@@ -146,8 +146,14 @@ const QuienesSomos = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.5 + index * 0.2, duration: 0.6 }}
-                  whileHover={{ scale: 1.05, y: -8 }}
-                  className="relative p-6 rounded-2xl bg-gradient-to-br from-gray-900/30 to-gray-800/30 border border-gray-700/50 overflow-hidden group"
+                  whileHover={{ scale: 1.02, y: -5 }}
+                  className={`relative p-8 rounded-2xl overflow-hidden group ${
+                    index === 0 
+                      ? 'bg-gradient-to-br from-blue-900/20 to-indigo-900/20 border border-blue-500/30' 
+                      : index === 1 
+                        ? 'bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-500/30'
+                        : 'bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border border-emerald-500/30'
+                  }`}
                 >
                   {/* Efecto de brillo */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>

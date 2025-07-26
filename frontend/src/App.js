@@ -165,7 +165,7 @@ function Landing() {
             transition={{ duration: 0.8, ease: 'easeOut' }}
             className="max-w-6xl mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl font-extrabold text-black mb-12 text-center drop-shadow-lg">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-12 text-center drop-shadow-lg">
               ¿Por qué elegirnos?
             </h2>
             

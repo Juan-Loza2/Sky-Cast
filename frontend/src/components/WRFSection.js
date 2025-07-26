@@ -446,9 +446,11 @@ const WRFSection = ({ loading: initialLoading }) => {
                             key={variable.id}
                             onClick={() => { setSelectedVariable(variable.id); setShowVariableDropdown(false); }}
                             className={`w-full flex items-center gap-2 px-4 py-2 text-sm transition ${
-                              selectedVariable === variable.id 
-                                ? 'button-primary font-bold' 
-                                : 'button'
+                              variable.id === 't2' 
+                                ? 'bg-white hover:bg-gray-100 dark:bg-blue-600 dark:hover:bg-blue-700 border border-gray-200 dark:border-blue-700 rounded text-gray-800 dark:text-white' 
+                                : selectedVariable === variable.id 
+                                  ? 'button-primary font-bold' 
+                                  : 'button'
                             }`}
 
                           >
