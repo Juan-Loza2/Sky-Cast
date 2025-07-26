@@ -446,11 +446,9 @@ const WRFSection = ({ loading: initialLoading }) => {
                             key={variable.id}
                             onClick={() => { setSelectedVariable(variable.id); setShowVariableDropdown(false); }}
                             className={`w-full flex items-center gap-2 px-4 py-2 text-sm transition ${
-                              variable.id === 't2' 
-                                ? 'temperature-card' 
-                                : selectedVariable === variable.id 
-                                  ? 'button-primary font-bold' 
-                                  : 'button'
+                              selectedVariable === variable.id 
+                                ? 'button-primary font-bold' 
+                                : 'button'
                             }`}
 
                           >

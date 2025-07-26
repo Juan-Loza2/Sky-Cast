@@ -5,15 +5,6 @@ import { ChevronLeft, ChevronRight, Clock } from "lucide-react"
 
 const HourSelector = ({ selectedHour, onHourChange, availableHours = [] }) => {
   const [currentHourIndex, setCurrentHourIndex] = useState(0)
-  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
-  
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setTheme(localStorage.getItem("theme") || "dark");
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
 
   // Usar las horas disponibles o generar un rango por defecto
   const hoursWithData = availableHours.length > 0 ? availableHours : []
@@ -70,10 +61,11 @@ const HourSelector = ({ selectedHour, onHourChange, availableHours = [] }) => {
       <div className="flex items-center justify-center space-x-4 mb-6">
         <button
           onClick={goToPreviousHour}
-          className="flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 min-w-[60px]"
+          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
           disabled={hoursWithData.length <= 1}
         >
           <ChevronLeft className="h-4 w-4" />
+          <span className="hidden sm:inline">Anterior</span>
         </button>
 
         <div className="bg-blue-50 border-2 border-blue-200 rounded-lg px-6 py-3 min-w-[140px] text-center">
@@ -85,9 +77,10 @@ const HourSelector = ({ selectedHour, onHourChange, availableHours = [] }) => {
 
         <button
           onClick={goToNextHour}
-          className="flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 min-w-[60px]"
+          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
           disabled={hoursWithData.length <= 1}
         >
+          <span className="hidden sm:inline">Siguiente</span>
           <ChevronRight className="h-4 w-4" />
         </button>
       </div>
@@ -98,18 +91,14 @@ const HourSelector = ({ selectedHour, onHourChange, availableHours = [] }) => {
           <button
             key={hour}
             onClick={() => selectHour(hour)}
-            className="px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 border"
-            style={{
-              backgroundColor: selectedHour === hour 
-                ? (theme === "dark" ? "#2563eb" : "#ffffff")
-                : (theme === "dark" ? "#ffffff" : "#2563eb"),
-              color: selectedHour === hour 
-                ? (theme === "dark" ? "#ffffff" : "#2563eb")
-                : (theme === "dark" ? "#2563eb" : "#ffffff"),
-              borderColor: "#2563eb",
-              borderWidth: "1px",
-              borderStyle: "solid"
-            }}
+            className={`
+              px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 border
+              ${
+                selectedHour === hour
+                  ? 'bg-[var(--selected-bg)] text-[var(--selected-text)] border-[var(--selected-border)] shadow-lg font-bold'
+                  : 'bg-[var(--unselected-bg)] text-[var(--unselected-text)] hover:bg-[var(--unselected-hover)] border-[var(--unselected-border)]'
+              } border rounded-md
+            `}
           >
             {hour}
           </button>
