@@ -382,7 +382,7 @@ const WRFSection = ({ loading: initialLoading }) => {
             className="flex items-center gap-5 mb-6 p-5 rounded-2xl bg-[var(--color-card)] text-[var(--color-text)]"
             style={{
               backdropFilter: 'blur(8px)',
-              border: '1.5px solid #2b3a5e',
+              border: document.documentElement.getAttribute('data-theme') === 'dark' ? '1.5px solid #2b3a5e' : 'none',
             }}
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -419,7 +419,6 @@ const WRFSection = ({ loading: initialLoading }) => {
               )}
             </div>
           </motion.div>
-          <motion.hr className="border-blue-900/40 my-4" initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ delay: 0.7, duration: 0.5 }} />
 
           <div className="space-y-4">
             <div>
@@ -447,11 +446,12 @@ const WRFSection = ({ loading: initialLoading }) => {
                             onClick={() => { setSelectedVariable(variable.id); setShowVariableDropdown(false); }}
                             className={`w-full flex items-center gap-2 px-4 py-2 text-sm transition ${
                               variable.id === 't2' 
-                                ? 'bg-white hover:bg-gray-100 dark:bg-blue-600 dark:hover:bg-blue-700 border border-gray-200 dark:border-blue-700 rounded text-gray-800 dark:text-white' 
+                                ? 'bg-white hover:bg-gray-100 dark:bg-blue-600 dark:hover:bg-blue-700 dark:border dark:border-blue-700 rounded text-gray-800 dark:text-white' 
                                 : selectedVariable === variable.id 
                                   ? 'button-primary font-bold' 
                                   : 'button'
                             }`}
+                            style={variable.id === 't2' ? { border: 'none' } : {}}
 
                           >
                             <variable.icon className="h-4 w-4 mr-2" />

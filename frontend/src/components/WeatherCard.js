@@ -26,6 +26,35 @@ export default function WeatherCard() {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
+  
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setTheme(localStorage.getItem("theme") || "dark");
+    };
+    
+    const handleThemeChange = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem("theme") || "dark";
+      setTheme(currentTheme);
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    document.addEventListener('DOMContentLoaded', handleThemeChange);
+    
+    // Verificar el tema inicial
+    handleThemeChange();
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      document.removeEventListener('DOMContentLoaded', handleThemeChange);
+    };
+  }, []);
+
+  // Efecto adicional para verificar el tema en cada render
+  useEffect(() => {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem("theme") || "dark";
+    setTheme(currentTheme);
+  });
 
   const fetchWeather = async () => {
     setLoading(true);
@@ -62,7 +91,13 @@ export default function WeatherCard() {
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-white/30 shadow-lg p-6 w-full animate-pulse">
+      <div 
+        className="rounded-2xl shadow-lg p-6 w-full animate-pulse"
+        style={{
+          background: theme === "dark" ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.1)',
+          color: theme === "dark" ? 'white' : '#1e293b'
+        }}
+      >
         <div className="h-8 bg-gray-200 rounded w-1/2 mb-4"></div>
         <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
         <div className="h-4 bg-gray-200 rounded w-2/3"></div>
@@ -71,8 +106,14 @@ export default function WeatherCard() {
   }
   if (error || !weather) {
     return (
-      <div className="rounded-2xl bg-white/30 shadow-lg p-6 w-full text-center text-red-600">
-        {error || "No hay datos de clima"}
+      <div 
+        className="rounded-2xl shadow-lg p-6 w-full text-center"
+        style={{
+          background: theme === "dark" ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.1)',
+          color: theme === "dark" ? 'white' : '#1e293b'
+        }}
+      >
+        <span className="text-red-600">{error || "No hay datos de clima"}</span>
       </div>
     );
   }
@@ -83,8 +124,12 @@ export default function WeatherCard() {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       whileHover={{ scale: 1.02, y: -2 }}
       transition={{ duration: 0.6, type: "spring" }}
-      className="rounded-2xl shadow-xl p-6 w-full text-white flex flex-col gap-2 relative overflow-hidden group"
-      style={{background: '#243b6b', backdropFilter: 'blur(6px)'}}
+      className="rounded-2xl shadow-xl p-6 w-full flex flex-col gap-2 relative overflow-hidden group"
+      style={{
+        background: theme === "dark" ? '#243b6b' : '#ffffff',
+        backdropFilter: 'blur(6px)',
+        color: theme === "dark" ? 'white' : '#1e293b'
+      }}
     >
       {/* Efecto de brillo */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>

@@ -6,6 +6,35 @@ import { motion } from "framer-motion"
 
 const DatosMeteorologicos = () => {
   const [currentTime, setCurrentTime] = useState(new Date())
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
+  
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setTheme(localStorage.getItem("theme") || "dark");
+    };
+    
+    const handleThemeChange = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem("theme") || "dark";
+      setTheme(currentTheme);
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    document.addEventListener('DOMContentLoaded', handleThemeChange);
+    
+    // Verificar el tema inicial
+    handleThemeChange();
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      document.removeEventListener('DOMContentLoaded', handleThemeChange);
+    };
+  }, []);
+
+  // Efecto adicional para verificar el tema en cada render
+  useEffect(() => {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem("theme") || "dark";
+    setTheme(currentTheme);
+  });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -70,8 +99,12 @@ const DatosMeteorologicos = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 whileHover={{ scale: 1.02, y: -2 }}
                 transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
-                className="rounded-2xl shadow-xl p-6 flex-1 text-white flex flex-col gap-2 relative overflow-hidden group"
-                style={{background: '#243b6b', backdropFilter: 'blur(6px)'}}
+                className="rounded-2xl shadow-xl p-6 flex-1 flex flex-col gap-2 relative overflow-hidden group"
+                style={{
+                  background: theme === "dark" ? '#243b6b' : '#ffffff',
+                  backdropFilter: 'blur(6px)',
+                  color: theme === "dark" ? 'white' : '#1e293b'
+                }}
               >
                 {/* Efecto de brillo */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -141,8 +174,12 @@ const DatosMeteorologicos = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 whileHover={{ scale: 1.02, y: -2 }}
                 transition={{ duration: 0.6, delay: 0.3, type: "spring" }}
-                className="rounded-2xl shadow-xl p-6 flex-1 text-white flex flex-col gap-2 relative overflow-hidden group"
-                style={{background: '#243b6b', backdropFilter: 'blur(6px)'}}
+                className="rounded-2xl shadow-xl p-6 flex-1 flex flex-col gap-2 relative overflow-hidden group"
+                style={{
+                  background: theme === "dark" ? '#243b6b' : '#ffffff',
+                  backdropFilter: 'blur(6px)',
+                  color: theme === "dark" ? 'white' : '#1e293b'
+                }}
               >
                 {/* Efecto de brillo */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -221,8 +258,12 @@ const DatosMeteorologicos = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 whileHover={{ scale: 1.02, y: -2 }}
                 transition={{ duration: 0.6, delay: 0.4, type: "spring" }}
-                className="rounded-2xl shadow-xl p-6 flex-1 text-white flex flex-col gap-2 relative overflow-hidden group"
-                style={{background: '#243b6b', backdropFilter: 'blur(6px)'}}
+                className="rounded-2xl shadow-xl p-6 flex-1 flex flex-col gap-2 relative overflow-hidden group"
+                style={{
+                  background: theme === "dark" ? '#243b6b' : '#ffffff',
+                  backdropFilter: 'blur(6px)',
+                  color: theme === "dark" ? 'white' : '#1e293b'
+                }}
               >
                 {/* Efecto de brillo */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -290,8 +331,12 @@ const DatosMeteorologicos = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 whileHover={{ scale: 1.02, y: -2 }}
                 transition={{ duration: 0.6, delay: 0.5, type: "spring" }}
-                className="rounded-2xl shadow-xl p-6 flex-1 text-white flex flex-col gap-2 relative overflow-hidden group"
-                style={{background: '#243b6b', backdropFilter: 'blur(6px)'}}
+                className="rounded-2xl shadow-xl p-6 flex-1 flex flex-col gap-2 relative overflow-hidden group"
+                style={{
+                  background: theme === "dark" ? '#243b6b' : '#ffffff',
+                  backdropFilter: 'blur(6px)',
+                  color: theme === "dark" ? 'white' : '#1e293b'
+                }}
               >
                 {/* Efecto de brillo */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -374,8 +419,12 @@ const DatosMeteorologicos = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 whileHover={{ scale: 1.02, y: -2 }}
                 transition={{ duration: 0.6, delay: 0.6, type: "spring" }}
-                className="rounded-2xl shadow-xl p-6 flex-1 text-white flex flex-col gap-2 relative overflow-hidden group"
-                style={{background: '#243b6b', backdropFilter: 'blur(6px)'}}
+                className="rounded-2xl shadow-xl p-6 flex-1 flex flex-col gap-2 relative overflow-hidden group"
+                style={{
+                  background: theme === "dark" ? '#243b6b' : '#ffffff',
+                  backdropFilter: 'blur(6px)',
+                  color: theme === "dark" ? 'white' : '#1e293b'
+                }}
               >
                 {/* Efecto de brillo */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
@@ -452,8 +501,12 @@ const DatosMeteorologicos = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 whileHover={{ scale: 1.02, y: -2 }}
                 transition={{ duration: 0.6, delay: 0.7, type: "spring" }}
-                className="rounded-2xl shadow-xl p-6 flex-1 text-white flex flex-col gap-2 relative overflow-hidden group"
-                style={{background: '#243b6b', backdropFilter: 'blur(6px)'}}
+                className="rounded-2xl shadow-xl p-6 flex-1 flex flex-col gap-2 relative overflow-hidden group"
+                style={{
+                  background: theme === "dark" ? '#243b6b' : '#ffffff',
+                  backdropFilter: 'blur(6px)',
+                  color: theme === "dark" ? 'white' : '#1e293b'
+                }}
               >
                 {/* Efecto de brillo */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>

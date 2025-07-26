@@ -4,7 +4,7 @@ import Dashboard from "./pages/Dashboard"
 import WeatherCard from "./components/WeatherCard"
 import { Cloud, Thermometer, Flame, Wind, Activity } from "lucide-react"
 import "./index.css"
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -115,6 +115,15 @@ function WidgetCarousel() {
 // Componente Landing separado
 function Landing() {
   const navigate = useNavigate();
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "dark");
+  
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setTheme(localStorage.getItem("theme") || "dark");
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-bg)]">
       <Header />
@@ -165,7 +174,7 @@ function Landing() {
             transition={{ duration: 0.8, ease: 'easeOut' }}
             className="max-w-6xl mx-auto"
           >
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-12 text-center drop-shadow-lg">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-12 text-center drop-shadow-lg" style={{ color: 'var(--color-text)' }}>
               ¿Por qué elegirnos?
             </h2>
             
