@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const weatherCodeMap = {
   0: { label: "Despejado", icon: "☀️" },
@@ -77,18 +78,181 @@ export default function WeatherCard() {
   }
 
   return (
-    <div className="rounded-2xl shadow-xl p-6 w-full text-white flex flex-col gap-2" style={{background: '#243b6b', backdropFilter: 'blur(6px)'}}>
-      <div className="flex justify-between items-start mb-2">
-        <span className="text-6xl font-extrabold leading-none">{weather.temp}°</span>
-        <span className="text-sm opacity-80 mt-1">{weather.time.toLocaleString('es-AR', { weekday: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+    <motion.div 
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      whileHover={{ scale: 1.02, y: -2 }}
+      transition={{ duration: 0.6, type: "spring" }}
+      className="rounded-2xl shadow-xl p-6 w-full text-white flex flex-col gap-2 relative overflow-hidden group"
+      style={{background: '#243b6b', backdropFilter: 'blur(6px)'}}
+    >
+      {/* Efecto de brillo */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+      
+      {/* Elementos de fondo animados según el clima */}
+      <div className="absolute inset-0 pointer-events-none">
+        {weather.condition.includes('Despejado') && (
+          <>
+            {/* Rayos de sol */}
+            <motion.div
+              className="absolute w-0.5 h-8 bg-yellow-300 rounded-full"
+              animate={{ 
+                rotate: [0, 360],
+                opacity: [0.3, 0.8, 0.3]
+              }}
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              style={{ top: '15%', left: '20%', transformOrigin: 'center bottom' }}
+            />
+            <motion.div
+              className="absolute w-0.5 h-6 bg-orange-300 rounded-full"
+              animate={{ 
+                rotate: [0, -360],
+                opacity: [0.4, 0.9, 0.4]
+              }}
+              transition={{ duration: 5, repeat: Infinity, ease: "linear", delay: 1 }}
+              style={{ top: '25%', left: '80%', transformOrigin: 'center bottom' }}
+            />
+          </>
+        )}
+        
+        {weather.condition.includes('Nublado') && (
+          <>
+            {/* Nubes flotantes */}
+            <motion.div
+              className="absolute w-8 h-4 bg-white/20 rounded-full"
+              animate={{ 
+                x: [-20, 100],
+                opacity: [0.2, 0.6, 0.2]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              style={{ top: '20%' }}
+            />
+            <motion.div
+              className="absolute w-6 h-3 bg-white/15 rounded-full"
+              animate={{ 
+                x: [-20, 100],
+                opacity: [0.3, 0.5, 0.3]
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear", delay: 2 }}
+              style={{ top: '40%' }}
+            />
+          </>
+        )}
+        
+        {weather.condition.includes('Lluvia') && (
+          <>
+            {/* Gotas de lluvia */}
+            <motion.div
+              className="absolute w-0.5 h-3 bg-blue-300 rounded-full"
+              animate={{ 
+                y: [-10, 100],
+                opacity: [0.6, 0]
+              }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+              style={{ left: '25%' }}
+            />
+            <motion.div
+              className="absolute w-0.5 h-2 bg-blue-400 rounded-full"
+              animate={{ 
+                y: [-10, 100],
+                opacity: [0.7, 0]
+              }}
+              transition={{ duration: 1.2, repeat: Infinity, ease: "linear", delay: 0.3 }}
+              style={{ left: '60%' }}
+            />
+            <motion.div
+              className="absolute w-0.5 h-4 bg-blue-200 rounded-full"
+              animate={{ 
+                y: [-10, 100],
+                opacity: [0.5, 0]
+              }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "linear", delay: 0.7 }}
+              style={{ left: '85%' }}
+            />
+          </>
+        )}
+        
+        {weather.condition.includes('Nieve') && (
+          <>
+            {/* Copos de nieve */}
+            <motion.div
+              className="absolute w-1 h-1 bg-white rounded-full"
+              animate={{ 
+                y: [-10, 100],
+                x: [0, 10, -10, 0],
+                opacity: [0.8, 0]
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              style={{ left: '30%' }}
+            />
+            <motion.div
+              className="absolute w-1 h-1 bg-white rounded-full"
+              animate={{ 
+                y: [-10, 100],
+                x: [0, -15, 15, 0],
+                opacity: [0.6, 0]
+              }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "linear", delay: 1 }}
+              style={{ left: '70%' }}
+            />
+          </>
+        )}
       </div>
-      <div className="text-2xl font-bold flex items-center gap-2 mb-1">
-        {weather.condition} <span>{weather.icon}</span>
+      
+      <div className="flex justify-between items-start mb-2 relative z-10">
+        <motion.span 
+          className="text-6xl font-extrabold leading-none"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+        >
+          {weather.temp}°
+        </motion.span>
+        <motion.span 
+          className="text-sm opacity-80 mt-1"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 0.8, x: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+        >
+          {weather.time.toLocaleString('es-AR', { weekday: 'short', hour: '2-digit', minute: '2-digit' })}
+        </motion.span>
       </div>
-      <div className="text-sm opacity-90 mb-1">
+      
+      <div className="text-2xl font-bold flex items-center gap-2 mb-1 relative z-10">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+        >
+          {weather.condition}
+        </motion.span>
+        <motion.span
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: 0.9, type: "spring", stiffness: 200 }}
+          className="text-2xl"
+        >
+          {weather.icon}
+        </motion.span>
+      </div>
+      
+      <motion.div 
+        className="text-sm opacity-90 mb-1 relative z-10"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 0.9, x: 0 }}
+        transition={{ delay: 1.1, duration: 0.5 }}
+      >
         <span className="align-middle">↑ {weather.max}° / ↓ {weather.min}°</span>
-      </div>
-      <div className="text-sm opacity-80">Sensación Térmica {weather.feels_like}°</div>
-    </div>
+      </motion.div>
+      
+      <motion.div 
+        className="text-sm opacity-80 relative z-10"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 0.8, x: 0 }}
+        transition={{ delay: 1.3, duration: 0.5 }}
+      >
+        Sensación Térmica {weather.feels_like}°
+      </motion.div>
+    </motion.div>
   );
 } 

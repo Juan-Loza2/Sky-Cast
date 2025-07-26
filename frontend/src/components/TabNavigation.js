@@ -52,13 +52,7 @@ const TabNavigation = ({ activeTab, onTabChange, estadisticas }) => {
             >
               <Icon className={`h-5 w-5 ${isActive ? "text-[var(--color-text)]" : "text-blue-600"}`} />
               <span>{tab.label}</span>
-              {isActive && (
-                <motion.div
-                  layoutId="tab-underline"
-                  className="absolute left-4 right-4 -bottom-1 h-1 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              )}
+
             </button>
           )
         })}

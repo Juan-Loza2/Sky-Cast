@@ -96,7 +96,31 @@ body {
   }
 
   .variable-card {
-    @apply bg-white rounded-lg border border-gray-200 p-4 cursor-pointer transition-all duration-200 hover:shadow-md;
+    @apply bg-white rounded-lg border border-gray-300 p-4 cursor-pointer transition-all duration-200 hover:shadow-md;
+  }
+
+  .temperature-card {
+    @apply bg-white rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-md;
+    border: none !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+  }
+
+  .hour-button-selected-dark {
+    @apply bg-blue-600 text-white border-blue-600 shadow-md;
+  }
+
+  .hour-button-unselected-dark {
+    @apply bg-white text-blue-600 border-blue-600 hover:bg-gray-50 hover:border-blue-700;
+  }
+
+  .hour-button-selected-light {
+    @apply bg-white text-blue-600 border-blue-600 shadow-md;
+  }
+
+  .hour-button-unselected-light {
+    @apply bg-blue-600 text-white border-blue-600 hover:bg-blue-700;
   }
 
   .variable-card-selected {

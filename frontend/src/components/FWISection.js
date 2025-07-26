@@ -38,17 +38,17 @@ const FWISection = ({ loading: initialLoading }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="mb-2 flex items-center gap-3">
-        <div className="bg-gradient-to-r from-orange-500 to-orange-700 p-2 rounded-lg">
-          <Flame className="h-7 w-7 text-white" />
+      <div className="mb-2">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="bg-gradient-to-r from-orange-500 to-orange-700 p-2 rounded-lg">
+            <Flame className="h-7 w-7 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-[var(--color-text)]">Índice de Peligro de Incendio (FWI)</h2>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold text-[var(--color-text)] mb-1">Índice de Peligro de Incendio (FWI)</h2>
-          <p className="text-[var(--color-text)]-100">
-            El Fire Weather Index (FWI) es un sistema de clasificación numérica del peligro de incendio forestal basado en
-            las condiciones meteorológicas. 
-          </p>
-        </div>
+        <p className="opacity-90">
+          El <b>Fire Weather Index (FWI)</b> es un sistema de clasificación numérica del peligro de incendio forestal basado en
+          las condiciones meteorológicas.
+        </p>
       </div>
 
       {/* Risk Scale */}
@@ -130,45 +130,32 @@ const FWISection = ({ loading: initialLoading }) => {
 
       {/* Information Panel */}
       <motion.div
-        className="rounded-2xl p-6 border border-orange-400 shadow-xl"
+        className="rounded-2xl p-6 border border-blue-400 shadow-xl"
         style={{
-          background: 'linear-gradient(120deg, rgba(255,140,0,0.10) 60%, rgba(255,255,255,0.05) 100%)',
+          background: '[var(--color-bg)]',
           backdropFilter: 'blur(2px)',
         }}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
       >
-        <div className="flex items-start space-x-3">
-          <Info className="h-6 w-6 text-orange-600 mt-1" />
+        <h3 className="text-lg font-semibold text-[var(--color-text)] mb-3">ℹ️ Información sobre el FWI</h3>
+        <div className="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text)]">
           <div>
-            <h3 className="text-lg font-semibold text-orange-700 mb-3">Información sobre el FWI</h3>
-            <div className="space-y-2 text-sm text-orange-700">
-              <p>
-                <strong>Componentes del FWI:</strong>
-              </p>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>
-                  <strong>FFMC:</strong> Contenido de humedad del combustible fino
-                </li>
-                <li>
-                  <strong>DMC:</strong> Contenido de humedad del combustible medio
-                </li>
-                <li>
-                  <strong>DC:</strong> Contenido de humedad del combustible grueso
-                </li>
-                <li>
-                  <strong>ISI:</strong> Índice de propagación inicial
-                </li>
-                <li>
-                  <strong>BUI:</strong> Índice de combustible disponible
-                </li>
-              </ul>
-              <p className="mt-3">
-                <strong>Factores considerados:</strong> Temperatura, humedad relativa, velocidad del viento y
-                precipitación.
-              </p>
-            </div>
+            <h4 className="font-semibold mb-2">Componentes del FWI</h4>
+            <ul className="space-y-1">
+              <li><strong>FFMC:</strong> Contenido de humedad del combustible fino</li>
+              <li><strong>DMC:</strong> Contenido de humedad del combustible medio</li>
+              <li><strong>DC:</strong> Contenido de humedad del combustible grueso</li>
+              <li><strong>ISI:</strong> Índice de propagación inicial</li>
+              <li><strong>BUI:</strong> Índice de combustible disponible</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">Factores considerados</h4>
+            <p>
+              El FWI se calcula considerando temperatura, humedad relativa, velocidad del viento y precipitación para evaluar el riesgo de incendios forestales.
+            </p>
           </div>
         </div>
       </motion.div>

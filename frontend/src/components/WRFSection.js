@@ -45,8 +45,8 @@ const WRFSection = ({ loading: initialLoading }) => {
       icon: Thermometer,
       color: "text-orange-600",
       bgColor: "bg-orange-50",
-      borderColor: "border-orange-200",
-      description: "Temperatura del aire a 2 metros sobre el suelo, expresada en grados Celsius (°C). Es fundamental para evaluar el confort térmico y el riesgo de heladas o calor extremo.",
+      borderColor: "border-gray-300",
+      description: "Temperatura del aire a 2 metros sobre el suelo, expresada en grados Celsius (°C).",
       category: "Temperatura",
     },
     {
@@ -56,7 +56,7 @@ const WRFSection = ({ loading: initialLoading }) => {
       color: "text-blue-700",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
-      description: "Suma total de la precipitación (lluvia) caída desde el inicio de la corrida del modelo, en milímetros (mm). Permite estimar acumulados de lluvia en un periodo.",
+      description: "Suma total de la precipitación (lluvia) caída desde el inicio de la corrida del modelo, en milímetros (mm).",
       category: "Precipitación",
     },
     {
@@ -86,7 +86,7 @@ const WRFSection = ({ loading: initialLoading }) => {
       color: "text-green-600",
       bgColor: "bg-green-50",
       borderColor: "border-green-200",
-      description: "Dirección desde la cual sopla el viento a 10 metros de altura, expresada en grados. Útil para navegación, agricultura y prevención de incendios.",
+      description: "Dirección desde la cual sopla el viento a 10 metros de altura, expresada en grados.",
       category: "Viento",
     },
     {
@@ -317,18 +317,18 @@ const WRFSection = ({ loading: initialLoading }) => {
   return (
     <div className="space-y-6 text-[var(--color-text)]">
       {/* Header */}
-      <div className="mb-2 flex items-center gap-3">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
-          <Thermometer className="h-7 w-7 text-white" />
+      <div className="mb-2">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
+            <Thermometer className="h-7 w-7 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold">Modelo WRF</h2>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold mb-1">Modelo WRF</h2>
-          <p className="opacity-90">
-            El <b>Modelo WRF (Weather Research and Forecasting)</b> es un sistema numérico avanzado utilizado para simular y predecir el estado de la atmósfera. En esta plataforma, se generan pronósticos meteorológicos de alta resolución especialmente adaptados para la provincia de Córdoba, con actualizaciones diarias y dos corridas principales por día (mañana y noche).<br/>
-            <br/>
-            Selecciona la variable meteorológica y el horario de interés para visualizar mapas interactivos con los resultados del modelo, útiles para el monitoreo, la toma de decisiones y la prevención de eventos meteorológicos adversos.
-          </p>
-        </div>
+        <p className="opacity-90">
+          El <b>Modelo WRF (Weather Research and Forecasting)</b> es un sistema numérico avanzado utilizado para simular y predecir el estado de la atmósfera.<br/>
+          <br/>
+          Selecciona la variable meteorológica y el horario de interés para visualizar mapas interactivos.
+        </p>
       </div>
       {/* Variable Selector */}
       <div className="mb-2 text-[var(--color-text)]">
@@ -437,7 +437,7 @@ const WRFSection = ({ loading: initialLoading }) => {
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
                 </button>
                 {showVariableDropdown && (
-                  <div className="absolute z-50 mt-2 w-full rounded-lg shadow-lg border border-gray-200 max-h-72 overflow-y-auto">
+                  <div className="absolute z-50 mt-2 w-full rounded-lg shadow-lg border border-gray-300 max-h-72 overflow-y-auto">
                     {variableGroupsWithOptions.map((group) => (
                       <div key={group.label}>
                         <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50">{group.label}</div>
@@ -445,7 +445,14 @@ const WRFSection = ({ loading: initialLoading }) => {
                           <button
                             key={variable.id}
                             onClick={() => { setSelectedVariable(variable.id); setShowVariableDropdown(false); }}
-                            className={`w-full flex items-center gap-2 px-4 py-2 text-sm button transition ${selectedVariable === variable.id ? 'button-primary font-bold' : ''}`}
+                            className={`w-full flex items-center gap-2 px-4 py-2 text-sm transition ${
+                              variable.id === 't2' 
+                                ? 'temperature-card' 
+                                : selectedVariable === variable.id 
+                                  ? 'button-primary font-bold' 
+                                  : 'button'
+                            }`}
+
                           >
                             <variable.icon className="h-4 w-4 mr-2" />
                             {variable.name}

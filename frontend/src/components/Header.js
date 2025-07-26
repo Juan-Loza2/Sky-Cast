@@ -53,16 +53,20 @@ const Header = () => {
               aria-label="Cambiar tema"
               title={theme === "dark" ? "Modo claro" : "Modo oscuro"}
             >
-              {theme === "dark" ? <Sun className="h-6 w-6 text-yellow-300" /> : <Moon className="h-6 w-6 text-blue-700" />}
+              {theme === "dark" ? <Moon className="h-6 w-6 text-blue-700" /> : <Sun className="h-6 w-6 text-yellow-300" />}
             </button>
             {/* Menú hamburguesa */}
             <div className="relative" ref={menuRef}>
               <button
-                className="p-2 rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className={`p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                  theme === "dark" 
+                    ? "hover:bg-blue-800" 
+                    : "hover:bg-white/20"
+                }`}
                 onClick={() => setOpen((v) => !v)}
                 aria-label="Abrir menú"
               >
-                <MoreVertical className="h-7 w-7 text-white" />
+                <MoreVertical className={`h-7 w-7 ${theme === "dark" ? "text-white" : "text-blue-600"}`} />
               </button>
               <AnimatePresence>
                 {open && (
@@ -72,26 +76,51 @@ const Header = () => {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.25, ease: 'easeOut' }}
                     className="absolute right-0 mt-2 w-56 rounded-xl shadow-2xl py-2 z-50"
-                    style={{ background: 'var(--color-card)', border: '1.5px solid var(--color-border)', backdropFilter: 'blur(6px)' }}
+                    style={{ 
+                      background: theme === "dark" ? 'var(--color-card)' : 'rgba(255, 255, 255, 0.95)', 
+                      backdropFilter: 'blur(6px)', 
+                      opacity: 0.95 
+                    }}
                   >
-                    <button
-                      className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
+                    <motion.button
+                      initial={{ opacity: 0, rotateX: -15 }}
+                      animate={{ opacity: 1, rotateX: 0 }}
+                      transition={{ delay: 0.1, duration: 0.3, ease: "easeOut" }}
+                      className={`block w-full text-left px-5 py-3 font-medium transition ${
+                        theme === "dark" 
+                          ? "text-blue-100 hover:bg-blue-900/60" 
+                          : "text-black hover:bg-blue-100"
+                      }`}
                       onClick={() => { navigate('/datos-meteorologicos'); setOpen(false); }}
                     >
                       Datos Meteorológicos
-                    </button>
-                    <button
-                      className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
+                    </motion.button>
+                    <motion.button
+                      initial={{ opacity: 0, rotateX: -15 }}
+                      animate={{ opacity: 1, rotateX: 0 }}
+                      transition={{ delay: 0.2, duration: 0.3, ease: "easeOut" }}
+                      className={`block w-full text-left px-5 py-3 font-medium transition ${
+                        theme === "dark" 
+                          ? "text-blue-100 hover:bg-blue-900/60" 
+                          : "text-black hover:bg-blue-100"
+                      }`}
                       onClick={() => { navigate('/'); setOpen(false); }}
                     >
                       Productos Meteorológicos
-                    </button>
-                    <button
-                      className="block w-full text-left px-5 py-3 text-blue-100 hover:bg-blue-900/40 font-medium transition"
+                    </motion.button>
+                    <motion.button
+                      initial={{ opacity: 0, rotateX: -15 }}
+                      animate={{ opacity: 1, rotateX: 0 }}
+                      transition={{ delay: 0.3, duration: 0.3, ease: "easeOut" }}
+                      className={`block w-full text-left px-5 py-3 font-medium transition ${
+                        theme === "dark" 
+                          ? "text-blue-100 hover:bg-blue-900/60" 
+                          : "text-black hover:bg-blue-100"
+                      }`}
                       onClick={() => { navigate('/quienes-somos'); setOpen(false); }}
                     >
                       Quienes Somos
-                    </button>
+                    </motion.button>
                   </motion.div>
                 )}
               </AnimatePresence>
