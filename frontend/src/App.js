@@ -14,6 +14,7 @@ import QuienesSomos from "./pages/QuienesSomos"
 import DatosMeteorologicos from "./pages/DatosMeteorologicos"
 
 function WidgetCarousel() {
+  const navigate = useNavigate();
   const [theme, setTheme] = React.useState(() => localStorage.getItem("theme") || "dark");
   
   React.useEffect(() => {
@@ -29,25 +30,33 @@ function WidgetCarousel() {
       title: "Modelo WRF",
       description: "Pronóstico meteorológico para la provincia de Córdoba.",
       icon: Thermometer,
-      iconBg: "from-blue-500 to-indigo-500"
+      iconBg: "from-blue-500 to-indigo-500",
+      route: "/",
+      tab: "WRF"
     },
     {
       title: "Índice FWI",
       description: "Monitoreo de peligro de incendios forestales",
       icon: Flame,
-      iconBg: "from-orange-500 to-red-500"
+      iconBg: "from-orange-500 to-red-500",
+      route: "/",
+      tab: "FWI"
     },
     {
       title: "Vientos en Rutas",
       description: "Alertas de ráfagas para seguridad vial",
       icon: Wind,
-      iconBg: "from-cyan-500 to-blue-400"
+      iconBg: "from-cyan-500 to-blue-400",
+      route: "/",
+      tab: "Vientos"
     },
     {
       title: "Gases Atmosféricos",
       description: "Medición de calidad del aire y contaminantes",
       icon: Activity,
-      iconBg: "from-green-500 to-blue-500"
+      iconBg: "from-green-500 to-blue-500",
+      route: "/",
+      tab: "Gases"
     }
   ];
   useEffect(() => {
@@ -72,7 +81,12 @@ function WidgetCarousel() {
           const Icon = widget.icon;
           return (
             <SwiperSlide key={i}>
-              <motion.div
+              <motion.button
+                onClick={() => {
+                  navigate(widget.route);
+                  // Guardar la pestaña activa en localStorage para que el dashboard la cargue
+                  localStorage.setItem('activeTab', widget.tab);
+                }}
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 whileHover={{ 
@@ -102,7 +116,7 @@ function WidgetCarousel() {
                   <span className="text-2xl font-extrabold text-[var(--color-text)] mb-1 leading-tight">{widget.title}</span>
                   <span className="text-[var(--color-text)] text-base font-medium leading-snug">{widget.description}</span>
                 </div>
-              </motion.div>
+              </motion.button>
             </SwiperSlide>
           );
         })}

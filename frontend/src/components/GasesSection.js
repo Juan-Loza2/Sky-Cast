@@ -77,7 +77,7 @@ const GasesSection = ({ loading: initialLoading }) => {
           <div className="relative">
             <button
               onClick={() => setShowInfo(!showInfo)}
-              className="p-2 rounded-full bg-gray-600 hover:bg-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white transition-colors duration-200"
+              className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
             >
               <Info className="h-5 w-5" />
             </button>
@@ -85,7 +85,7 @@ const GasesSection = ({ loading: initialLoading }) => {
             <AnimatePresence>
               {showInfo && (
                 <motion.div
-                  className="absolute top-full right-0 mt-2 w-80 sm:w-96 md:w-[420px] bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
+                  className="absolute top-full right-0 mt-2 w-80 sm:w-96 md:w-[420px] bg-[var(--color-bg)] rounded-xl shadow-2xl border border-[var(--color-border)] z-50 overflow-hidden"
                   initial={{ opacity: 0, y: -10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -104,33 +104,33 @@ const GasesSection = ({ loading: initialLoading }) => {
                     <div className="space-y-3 sm:space-y-4">
                       {/* CO2 */}
                       <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-lg p-3 sm:p-4">
-                        <h5 className="font-bold text-red-900 dark:text-red-100 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                        <h5 className="font-bold text-[var(--color-text)] mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
                           <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                           Dióxido de Carbono (CO₂)
                         </h5>
-                        <p className="text-red-700 dark:text-red-300 text-xs sm:text-sm">
+                        <p className="text-[var(--color-text)]/80 text-xs sm:text-sm">
                           Principal gas de efecto invernadero. Las mediciones muestran las variaciones diarias de concentración en la atmósfera local.
                         </p>
                       </div>
                       
                       {/* CH4 */}
                       <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-3 sm:p-4">
-                        <h5 className="font-bold text-green-900 dark:text-green-100 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                        <h5 className="font-bold text-[var(--color-text)] mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
                           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                           Metano (CH₄)
                         </h5>
-                        <p className="text-green-700 dark:text-green-300 text-xs sm:text-sm">
+                        <p className="text-[var(--color-text)]/80 text-xs sm:text-sm">
                           Segundo gas de efecto invernadero más importante. Tiene un potencial de calentamiento global mayor que el CO₂.
                         </p>
                       </div>
                       
                       {/* Información técnica */}
                       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-3 sm:p-4">
-                        <h5 className="font-bold text-blue-900 dark:text-blue-100 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                        <h5 className="font-bold text-[var(--color-text)] mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
                           <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                           Información Técnica
                         </h5>
-                        <div className="space-y-2 text-xs sm:text-sm text-blue-700 dark:text-blue-300">
+                        <div className="space-y-2 text-xs sm:text-sm text-[var(--color-text)]/80">
                           <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
                             <span>Analizador: Picarro</span>
@@ -148,7 +148,7 @@ const GasesSection = ({ loading: initialLoading }) => {
                       
                       {/* Nota informativa */}
                       <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-lg p-2 sm:p-3 border-l-4 border-orange-400">
-                        <p className="text-amber-800 dark:text-amber-200 text-xs sm:text-sm font-medium">
+                        <p className="text-[var(--color-text)] text-xs sm:text-sm font-medium">
                           💡 Los gases de efecto invernadero son fundamentales para entender el cambio climático y sus impactos en el medio ambiente.
                         </p>
                       </div>
@@ -171,10 +171,10 @@ const GasesSection = ({ loading: initialLoading }) => {
       <div>
         <div className="flex items-center space-x-3 mb-4">
           <Calendar className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-[var(--color-text)]">Seleccionar fecha</h3>
+          <h3 className="text-lg font-semibold text-[var(--color-text)]">Fecha</h3>
         </div>
         <div className="max-w-xs">
-          <label className="block text-sm font-medium text-[var(--color-text)] mb-2">Fecha</label>
+          <label className="block text-sm font-medium text-[var(--color-text)] mb-2">Seleccionar Fecha</label>
           <div className="relative">
             <button
               type="button"

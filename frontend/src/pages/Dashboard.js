@@ -7,10 +7,14 @@ import GasesSection from "../components/GasesSection"
 import FWISection from "../components/FWISection"
 import VientosSection from "../components/VientosSection"
 import { fetchEstadisticas } from "../services/api"
-import { motion } from "framer-motion";
+import { motion } from "framer-motion"
+import { MapPin, Phone, Mail, Globe, Facebook, Twitter, Cloud } from "lucide-react"
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("WRF")
+  const [activeTab, setActiveTab] = useState(() => {
+    // Leer la pestaña activa desde localStorage o usar "WRF" por defecto
+    return localStorage.getItem('activeTab') || "WRF"
+  })
   const [estadisticas, setEstadisticas] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -91,9 +95,95 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} estadisticas={estadisticas} />
-      {renderActiveSection()}
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1 space-y-6 animate-fade-in">
+        <TabNavigation 
+          activeTab={activeTab} 
+          onTabChange={(tab) => {
+            setActiveTab(tab);
+            localStorage.setItem('activeTab', tab);
+          }} 
+          estadisticas={estadisticas} 
+        />
+        {renderActiveSection()}
+      </div>
+      
+      {/* Footer */}
+      <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-[var(--color-bg)] text-[var(--color-text)]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div>
+            <div className="flex items-center mb-4">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg mr-3">
+                <Cloud className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-[var(--color-text)]">OHMC</h3>
+                <p className="text-gray-500 text-sm">Sky cast</p>
+              </div>
+            </div>
+            <p className="text-gray-500 text-sm">
+              Observatorio Hidrometeorologico de la Provincia de Cordoba - Monitoreo meteorológico avanzado para la prevención de riesgos ambientales.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-bold text-[var(--color-text)] mb-3">Enlaces Rápidos</h3>
+              <ul className="space-y-1">
+                <li>
+                  <a href="/landing" className="text-gray-500 hover:text-gray-700 transition-colors text-sm">
+                    Inicio
+                  </a>
+                </li>
+                <li>
+                  <a href="/datos-meteorologicos" className="text-gray-500 hover:text-gray-700 transition-colors text-sm">
+                    Datos Meteorológicos
+                  </a>
+                </li>
+                <li>
+                  <a href="/quienes-somos" className="text-gray-500 hover:text-gray-700 transition-colors text-sm">
+                    Quienes Somos
+                  </a>
+                </li>
+                <li>
+                  <a href="/" className="text-gray-500 hover:text-gray-700 transition-colors text-sm">
+                    Dashboard
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-[var(--color-text)] mb-3">Servicios</h3>
+              <ul className="space-y-1">
+                <li>
+                  <a href="#" className="text-gray-500 hover:text-gray-700 transition-colors text-sm">
+                    Modelo WRF
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-500 hover:text-gray-700 transition-colors text-sm">
+                    Índice FWI
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-500 hover:text-gray-700 transition-colors text-sm">
+                    Vientos en Rutas
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-500 hover:text-gray-700 transition-colors text-sm">
+                    Gases Atmosféricos
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="mt-8 pt-8 border-t border-[var(--color-border)]">
+          <div className="text-center text-gray-500 text-sm">
+            © 2025 OHMC - Sky cast. Todos los derechos reservados. Desarrollado con fines educativos.
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

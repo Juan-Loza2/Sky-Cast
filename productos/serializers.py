@@ -23,13 +23,16 @@ class ProductoSerializer(serializers.ModelSerializer):
                  'nombre_archivo', 'fechas', 'ultima_fecha']
     
     def get_ultima_fecha(self, obj):
-        ultima = obj.fechas.first()
-        if ultima:
-            return {
-                'fecha': ultima.fecha,
-                'hora': ultima.hora,
-                'fecha_creacion': ultima.fecha_creacion
-            }
+        try:
+            ultima = obj.fechas.first()
+            if ultima:
+                return {
+                    'fecha': ultima.fecha,
+                    'hora': ultima.hora,
+                    'fecha_creacion': ultima.fecha_creacion
+                }
+        except Exception as e:
+            print(f"Error getting ultima_fecha for product {obj.id}: {e}")
         return None
     
     def get_imagen_url(self, obj):
@@ -46,9 +49,12 @@ class ProductoListSerializer(serializers.ModelSerializer):
                  'nombre_archivo', 'ultima_fecha']
     
     def get_ultima_fecha(self, obj):
-        ultima = obj.fechas.first()
-        if ultima:
-            return f"{ultima.fecha} {ultima.hora}"
+        try:
+            ultima = obj.fechas.first()
+            if ultima:
+                return f"{ultima.fecha} {ultima.hora}"
+        except Exception as e:
+            print(f"Error getting ultima_fecha for product {obj.id}: {e}")
         return None
     
     def get_imagen_url(self, obj):

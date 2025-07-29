@@ -32,7 +32,7 @@ class ProductoListView(generics.ListAPIView):
     ordering = ['-fechas__fecha', '-fechas__hora']
     
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Producto.objects.select_related('tipo_producto').prefetch_related('fechas')
         
         # Log para debugging
         logger.info(f"ProductoListView - Query params: {self.request.query_params}")

@@ -41,14 +41,14 @@ const FWISection = ({ loading: initialLoading }) => {
       {/* Header */}
       <div className="mb-2">
         <div className="flex items-center gap-3 mb-3">
-        <div className="bg-gradient-to-r from-orange-500 to-orange-700 p-2 rounded-lg">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
           <Flame className="h-7 w-7 text-white" />
         </div>
           <h2 className="text-2xl font-bold text-[var(--color-text)]">Índice de Peligro de Incendio (FWI)</h2>
           <div className="relative">
             <button
               onClick={() => setShowInfo(!showInfo)}
-              className="p-2 rounded-full bg-gray-600 hover:bg-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white transition-colors duration-200"
+              className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
             >
               <Info className="h-5 w-5" />
             </button>
@@ -56,7 +56,7 @@ const FWISection = ({ loading: initialLoading }) => {
             <AnimatePresence>
               {showInfo && (
                 <motion.div
-                  className="absolute top-full right-0 mt-2 w-80 sm:w-96 md:w-[420px] bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
+                  className="absolute top-full right-0 mt-2 w-80 sm:w-96 md:w-[420px] bg-[var(--color-bg)] rounded-xl shadow-2xl border border-[var(--color-border)] z-50 overflow-hidden"
                   initial={{ opacity: 0, y: -10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -75,63 +75,63 @@ const FWISection = ({ loading: initialLoading }) => {
                     <div className="space-y-3 sm:space-y-4">
                       {/* Componentes */}
                       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-3 sm:p-4">
-                        <h5 className="font-bold text-blue-900 dark:text-blue-100 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                        <h5 className="font-bold text-[var(--color-text)] mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
                           <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                           Componentes del FWI
                         </h5>
                         <div className="grid grid-cols-1 gap-1 sm:gap-2 text-xs sm:text-sm">
                           <div className="flex justify-between items-center py-1 border-b border-blue-200 dark:border-blue-700">
-                            <span className="font-semibold text-blue-800 dark:text-blue-200">FFMC</span>
-                            <span className="text-blue-600 dark:text-blue-300 text-xs">Combustible fino</span>
+                            <span className="font-semibold text-[var(--color-text)]">FFMC</span>
+                            <span className="text-[var(--color-text)]/80 text-xs">Combustible fino</span>
                           </div>
                           <div className="flex justify-between items-center py-1 border-b border-blue-200 dark:border-blue-700">
-                            <span className="font-semibold text-blue-800 dark:text-blue-200">DMC</span>
-                            <span className="text-blue-600 dark:text-blue-300 text-xs">Combustible medio</span>
+                            <span className="font-semibold text-[var(--color-text)]">DMC</span>
+                            <span className="text-[var(--color-text)]/80 text-xs">Combustible medio</span>
                           </div>
                           <div className="flex justify-between items-center py-1 border-b border-blue-200 dark:border-blue-700">
-                            <span className="font-semibold text-blue-800 dark:text-blue-200">DC</span>
-                            <span className="text-blue-600 dark:text-blue-300 text-xs">Combustible grueso</span>
+                            <span className="font-semibold text-[var(--color-text)]">DC</span>
+                            <span className="text-[var(--color-text)]/80 text-xs">Combustible grueso</span>
                           </div>
                           <div className="flex justify-between items-center py-1 border-b border-blue-200 dark:border-blue-700">
-                            <span className="font-semibold text-blue-800 dark:text-blue-200">ISI</span>
-                            <span className="text-blue-600 dark:text-blue-300 text-xs">Propagación inicial</span>
+                            <span className="font-semibold text-[var(--color-text)]">ISI</span>
+                            <span className="text-[var(--color-text)]/80 text-xs">Propagación inicial</span>
                           </div>
                           <div className="flex justify-between items-center py-1">
-                            <span className="font-semibold text-blue-800 dark:text-blue-200">BUI</span>
-                            <span className="text-blue-600 dark:text-blue-300 text-xs">Combustible disponible</span>
+                            <span className="font-semibold text-[var(--color-text)]">BUI</span>
+                            <span className="text-[var(--color-text)]/80 text-xs">Combustible disponible</span>
                           </div>
                         </div>
                       </div>
                       
                       {/* Factores */}
                       <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-3 sm:p-4">
-                        <h5 className="font-bold text-green-900 dark:text-green-100 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                        <h5 className="font-bold text-[var(--color-text)] mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
                           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                           Factores Meteorológicos
                         </h5>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 text-xs sm:text-sm">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                            <span className="text-green-700 dark:text-green-300">Temperatura</span>
+                            <span className="text-[var(--color-text)]/80">Temperatura</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                            <span className="text-green-700 dark:text-green-300">Humedad</span>
+                            <span className="text-[var(--color-text)]/80">Humedad</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                            <span className="text-green-700 dark:text-green-300">Velocidad del viento</span>
+                            <span className="text-[var(--color-text)]/80">Velocidad del viento</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                            <span className="text-green-700 dark:text-green-300">Precipitación</span>
+                            <span className="text-[var(--color-text)]/80">Precipitación</span>
                           </div>
                         </div>
                       </div>
                       
                       {/* Nota informativa */}
                       <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-lg p-2 sm:p-3 border-l-4 border-orange-400">
-                        <p className="text-amber-800 dark:text-amber-200 text-xs sm:text-sm font-medium">
+                        <p className="text-[var(--color-text)] text-xs sm:text-sm font-medium">
                           💡 El FWI evalúa el riesgo de incendios forestales basándose en condiciones meteorológicas actuales y previstas.
                         </p>
                       </div>
@@ -152,27 +152,50 @@ const FWISection = ({ loading: initialLoading }) => {
       </div>
 
       {/* Risk Scale */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-[var(--color-text)] mb-4">📊 Escala de Riesgo</h3>
-        <div className="flex flex-col gap-5 md:grid md:grid-cols-5 md:gap-4">
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-1 h-8 bg-gradient-to-b from-orange-400 to-red-500 rounded-full"></div>
+          <h3 className="text-xl font-bold text-[var(--color-text)]">Escala de Riesgo FWI</h3>
+        </div>
+        
+        <div className="flex justify-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 max-w-6xl">
           {riskLevels.map((risk, index) => (
             <motion.div
               key={index}
-              className="flex flex-col items-center"
-              initial={{ opacity: 0, y: 40 }}
+              className="group relative h-full"
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 + index * 0.12, duration: 0.6, type: 'spring', stiffness: 120 }}
+              transition={{ delay: 0.1 + index * 0.08, duration: 0.5, type: 'spring', stiffness: 100 }}
             >
-              <div
-                className={`w-full ${risk.color} text-[var(--color-text)] py-5 px-2 rounded-2xl shadow-xl flex flex-col items-center justify-center mb-2 transition-transform hover:scale-105`}
-                style={{ minWidth: 120 }}
-              >
-                <span className="font-extrabold text-xl md:text-2xl tracking-tight drop-shadow">{risk.level}</span>
-                <span className="text-base md:text-lg font-semibold opacity-90">{risk.range}</span>
+              <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 p-3 transition-all duration-300 hover:scale-105 hover:shadow-xl h-full flex flex-col">
+                {/* Color indicator */}
+                <div className={`absolute top-0 left-0 w-full h-1 ${risk.color} rounded-t-xl`}></div>
+                
+                {/* Content */}
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className={`w-2 h-2 ${risk.color} rounded-full shadow-md`}></div>
+                    <span className="text-xs font-medium text-[var(--color-text)]/60 uppercase tracking-wider">
+                      {risk.range}
+                    </span>
+                  </div>
+                  
+                  <h4 className="text-sm font-bold text-[var(--color-text)] mb-1">
+                    {risk.level}
+                  </h4>
+                  
+                  <p className="text-xs text-[var(--color-text)]/80 leading-tight flex-grow">
+                    {risk.description}
+                  </p>
+                  
+                  {/* Hover effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                </div>
               </div>
-              <p className="text-sm text-[var(--color-text)] font-medium mt-1 md:mt-2 text-center max-w-[180px]">{risk.description}</p>
             </motion.div>
           ))}
+          </div>
         </div>
       </div>
 

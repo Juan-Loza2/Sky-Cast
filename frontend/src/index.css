@@ -40,6 +40,13 @@
   --unselected-border: #3b82f6;
 }
 
+/* Borde blanco para botones activos en tema claro */
+[data-theme="light"] .button-primary,
+[data-theme="light"] .tab-button-active,
+[data-theme="light"] .time-button-active {
+  border: 1.5px solid white;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);

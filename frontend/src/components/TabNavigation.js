@@ -50,7 +50,7 @@ const TabNavigation = ({ activeTab, onTabChange, estadisticas }) => {
                 ${isActive ? "button-primary text-[var(--color-text)] shadow-lg" : "button text-[var(--color-text)] hover:bg-blue-50"}
               `}
             >
-              <Icon className={`h-5 w-5 ${isActive ? "text-[var(--color-text)]" : "text-blue-600"}`} />
+              <Icon className={`h-5 w-5 ${isActive ? "text-white" : "text-blue-600"}`} />
               <span>{tab.label}</span>
 
             </button>

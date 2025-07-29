@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 tipo_producto=tipo_fwi,
                 variable="FWI",
                 nombre_archivo="FWI.png",
-                url_imagen=url_fwi,
+                defaults={'url_imagen': url_fwi}
             )
             self.download_and_save_image(producto_fwi, url_fwi)
             FechaProducto.objects.get_or_create(
@@ -50,7 +50,7 @@ class Command(BaseCommand):
                     tipo_producto=tipo_viento,
                     variable=nombre,
                     nombre_archivo=archivo,
-                    url_imagen=url,
+                    defaults={'url_imagen': url}
                 )
                 self.download_and_save_image(producto, url)
                 FechaProducto.objects.get_or_create(
@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 tipo_producto=tipo_rutas,
                 variable="rafagas_rutas",
                 nombre_archivo="rafagas_rutas.gif",
-                url_imagen=url_rutas,
+                defaults={'url_imagen': url_rutas}
             )
             self.download_and_save_image(producto_rutas, url_rutas)
             FechaProducto.objects.get_or_create(
@@ -87,7 +87,7 @@ class Command(BaseCommand):
                     tipo_producto=tipo_gas,
                     variable=var,
                     nombre_archivo=filename,
-                    url_imagen=url,
+                    defaults={'url_imagen': url}
                 )
                 self.download_and_save_image(producto, url)
                 FechaProducto.objects.get_or_create(
@@ -119,7 +119,7 @@ class Command(BaseCommand):
                         tipo_producto=tipo_wrf,
                         variable=var,
                         nombre_archivo=nombre_archivo,
-                        url_imagen=url,
+                        defaults={'url_imagen': url}
                     )
                     self.download_and_save_image(producto, url)
                     FechaProducto.objects.get_or_create(
@@ -139,7 +139,7 @@ class Command(BaseCommand):
                         tipo_producto=tipo_wrf,
                         variable=var,
                         nombre_archivo=nombre_archivo,
-                        url_imagen=url,
+                        defaults={'url_imagen': url}
                     )
                     self.download_and_save_image(producto, url)
                     FechaProducto.objects.get_or_create(
