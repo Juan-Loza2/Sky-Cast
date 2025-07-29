@@ -15,21 +15,11 @@ def download_and_save_image(producto, url):
     """Descargar imagen desde URL y guardarla en el modelo"""
     try:
         logger.info(f"Descargando imagen: {url}")
-        response = requests.get(url, timeout=30, stream=True)
+        response = requests.get(url, timeout=30)
         
         if response.status_code == 200:
-            # Obtener nombre del archivo desde la URL
-            parsed_url = urlparse(url)
-            filename = os.path.basename(parsed_url.path)
-            
-            # Si no hay extensión, usar .png por defecto
-            if not filename or '.' not in filename:
-                filename = f"{producto.nombre_archivo}.png"
-            
-            # Guardar imagen en el campo url_imagen
-            producto.url_imagen = url
-            producto.save()
-            logger.info(f"✅ Imagen guardada: {filename}")
+            filename = producto.nombre_archivo
+            producto.foto.save(filename, ContentFile(response.content), save=True)
             return True
         else:
             logger.warning(f"⚠️ Error HTTP {response.status_code} para {url}")

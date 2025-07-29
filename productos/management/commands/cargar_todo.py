@@ -1,13 +1,26 @@
 from django.core.management.base import BaseCommand
 from productos.models import Producto, TipoProducto, FechaProducto
 from datetime import date, timedelta, time
+import requests
+from django.core.files.base import ContentFile
 
 class Command(BaseCommand):
-    help = 'Carga datos de FWI, vientos, medición aire y WRF (todas las variables) para el último mes.'
+    help = 'Carga datos de FWI, vientos, medición aire y WRF (todas las variables) para la última semana y descarga las fotos.'
+
+    def download_and_save_image(self, producto, url):
+        try:
+            response = requests.get(url, timeout=30)
+            if response.status_code == 200:
+                filename = producto.nombre_archivo
+                producto.foto.save(filename, ContentFile(response.content), save=True)
+                return True
+        except Exception:
+            pass
+        return False
 
     def handle(self, *args, **options):
         hoy = date.today()
-        dias = 30
+        dias = 7
 
         # 1. FWI
         tipo_fwi, _ = TipoProducto.objects.get_or_create(nombre="FWI")
@@ -20,6 +33,7 @@ class Command(BaseCommand):
                 nombre_archivo="FWI.png",
                 url_imagen=url_fwi,
             )
+            self.download_and_save_image(producto_fwi, url_fwi)
             FechaProducto.objects.get_or_create(
                 fecha=d,
                 hora=time(12, 0),
@@ -38,6 +52,7 @@ class Command(BaseCommand):
                     nombre_archivo=archivo,
                     url_imagen=url,
                 )
+                self.download_and_save_image(producto, url)
                 FechaProducto.objects.get_or_create(
                     fecha=d,
                     hora=hora_v,
@@ -53,6 +68,7 @@ class Command(BaseCommand):
                 nombre_archivo="rafagas_rutas.gif",
                 url_imagen=url_rutas,
             )
+            self.download_and_save_image(producto_rutas, url_rutas)
             FechaProducto.objects.get_or_create(
                 fecha=d,
                 hora=time(11, 0),
@@ -73,17 +89,17 @@ class Command(BaseCommand):
                     nombre_archivo=filename,
                     url_imagen=url,
                 )
+                self.download_and_save_image(producto, url)
                 FechaProducto.objects.get_or_create(
                     fecha=d,
                     hora=time(10, 30),
                     producto=producto
                 )
 
-        # 4. WRF (todas las variables, cada 3 horas, para el último mes)
+        # 4. WRF (todas las variables, cada 3 horas, para la última semana)
         wrf_variables_permitidas = ["t2", "ppnaccum", "rh2", "max_dbz", "wdir10", "wspd10"]
         wrf_variables = [v for v in wrf_variables_permitidas if v in wrf_variables_permitidas]
         tipo_wrf, _ = TipoProducto.objects.get_or_create(nombre="wrf_cba")
-        # Para cada día, dos corridas: 18 UTC (para la mañana siguiente) y 06 UTC (para la tarde)
         for delta in range(dias):
             d = hoy - timedelta(days=delta)
             yyyy = d.year
@@ -105,6 +121,7 @@ class Command(BaseCommand):
                         nombre_archivo=nombre_archivo,
                         url_imagen=url,
                     )
+                    self.download_and_save_image(producto, url)
                     FechaProducto.objects.get_or_create(
                         fecha=d,
                         hora=time(hora_arg, 0),
@@ -124,9 +141,10 @@ class Command(BaseCommand):
                         nombre_archivo=nombre_archivo,
                         url_imagen=url,
                     )
+                    self.download_and_save_image(producto, url)
                     FechaProducto.objects.get_or_create(
                         fecha=d,
                         hora=time(hora_arg, 0),
                         producto=producto
                     )
-        self.stdout.write(self.style.SUCCESS('¡Datos de todos los tipos cargados para el último mes!')) 
+        self.stdout.write(self.style.SUCCESS('¡Datos de todos los tipos cargados para la última semana y fotos descargadas!')) 

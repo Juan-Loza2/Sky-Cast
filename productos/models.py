@@ -18,10 +18,12 @@ class Producto(models.Model):
     tipo_producto = models.ForeignKey(TipoProducto, on_delete=models.CASCADE)
     variable = models.CharField(max_length=50, null=True, blank=True)  # Para WRF
     nombre_archivo = models.CharField(max_length=200)
+    foto = models.ImageField(upload_to='productos/', null=True, blank=True)
     
     class Meta:
         verbose_name = "Producto"
         verbose_name_plural = "Productos"
+        unique_together = ['tipo_producto', 'variable', 'nombre_archivo']
     
     def __str__(self):
         return f"{self.tipo_producto.nombre} - {self.nombre_archivo}"

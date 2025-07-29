@@ -46,9 +46,9 @@ const QuienesSomos = () => {
           </motion.div>
 
           {/* Misión y Visión */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.8 }}
             className="grid md:grid-cols-2 gap-8 mb-16"
           >
@@ -97,7 +97,7 @@ const QuienesSomos = () => {
                 <p className="text-[var(--color-text)]/80 text-lg leading-relaxed">
                   Ser líderes en la innovación tecnológica aplicada a la meteorología, contribuyendo al desarrollo sostenible y la resiliencia climática de nuestra región.
                 </p>
-              </div>
+          </div>
             </motion.div>
           </motion.div>
 
@@ -173,7 +173,7 @@ const QuienesSomos = () => {
                   </div>
                 </motion.div>
               ))}
-            </div>
+          </div>
           </motion.div>
 
           {/* Información de Contacto */}
@@ -210,8 +210,8 @@ const QuienesSomos = () => {
                 <Mail className="h-5 w-5" />
                 info@ohmc.com
               </motion.a>
-            </div>
-          </motion.div>
+          </div>
+        </motion.div>
         </div>
       </main>
       {/* Degradé de azul a gris antes del footer */}
@@ -232,22 +232,22 @@ const QuienesSomos = () => {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold">Enlaces Rápidos</h4>
-              <div className="space-y-2">
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold">Enlaces Rápidos</h4>
+            <div className="space-y-2">
                 <a href="/landing" className="block text-gray-400 hover:text-white transition-colors">Inicio</a>
                 <a href="/datos-meteorologicos" className="block text-gray-400 hover:text-white transition-colors">Datos Meteorológicos</a>
-                <a href="/quienes-somos" className="block text-gray-400 hover:text-white transition-colors">Quienes Somos</a>
-                <a href="/" className="block text-gray-400 hover:text-white transition-colors">Dashboard</a>
-              </div>
+              <a href="/quienes-somos" className="block text-gray-400 hover:text-white transition-colors">Quienes Somos</a>
+              <a href="/" className="block text-gray-400 hover:text-white transition-colors">Dashboard</a>
             </div>
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold">Servicios</h4>
-              <div className="space-y-2">
-                <p className="text-gray-400">Modelo WRF</p>
-                <p className="text-gray-400">Índice FWI</p>
-                <p className="text-gray-400">Vientos en Rutas</p>
-                <p className="text-gray-400">Gases Atmosféricos</p>
+          </div>
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold">Servicios</h4>
+            <div className="space-y-2">
+              <p className="text-gray-400">Modelo WRF</p>
+              <p className="text-gray-400">Índice FWI</p>
+              <p className="text-gray-400">Vientos en Rutas</p>
+              <p className="text-gray-400">Gases Atmosféricos</p>
               </div>
             </div>
           </div>

@@ -70,9 +70,9 @@ const GasesSection = ({ loading: initialLoading }) => {
       {/* Header */}
       <div className="mb-2">
         <div className="flex items-center gap-3 mb-3">
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
-            <Activity className="h-7 w-7 text-white" />
-          </div>
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
+          <Activity className="h-7 w-7 text-white" />
+        </div>
           <h2 className="text-2xl font-bold text-[var(--color-text)]">Medición de Gases de Efecto Invernadero</h2>
           <div className="relative">
             <button
